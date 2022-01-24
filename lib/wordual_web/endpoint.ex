@@ -7,7 +7,7 @@ defmodule WordualWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_wordual_key",
-    signing_salt: "EZtSh3kQ"
+    signing_salt: "UEhG8CLl"
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]

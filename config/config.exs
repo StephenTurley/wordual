@@ -15,7 +15,7 @@ config :wordual, WordualWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: WordualWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Wordual.PubSub,
-  live_view: [signing_salt: "o0CIIdMO"]
+  live_view: [signing_salt: "xAfEyIxr"]
 
 # Configures the mailer
 #

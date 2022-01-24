@@ -17,7 +17,7 @@ config :wordual, Wordual.Repo,
 # you can enable the server option below.
 config :wordual, WordualWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "R2vfo2bqzkPlWLHyB8mDr/CJWBR3CmfG6HugJ+cwOzm4gayYoWP+5mfO/2dkq8Vy",
+  secret_key_base: "gp2LEeUGoNUhJlf8FFdOPxGduNWLhYs3joA+5czWVtCklZKuV7r9RQ0lqKn4AvVg",
   server: false
 
 # In test we don't send emails.

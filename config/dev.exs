@@ -22,7 +22,7 @@ config :wordual, WordualWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "pPrYwNosUc46HHolFevdESeU4QiRAnz+gFKjfCfAufA8vZb47Ot6Ld3/G6JHG4C7",
+  secret_key_base: "G1DnZx8HLgmuYYhvq0FUYIqYqkzvvs85LzCgZUGePH0+QhRRtA1bhw7QraEEx9OP",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
