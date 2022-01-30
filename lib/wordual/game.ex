@@ -40,9 +40,6 @@ defmodule Wordual.Game do
   @impl true
   def handle_call({:join, player_id}, _from, %{player_1: player_1, player_2: player_2} = game) do
     cond do
-      player_1 == player_id || player_2 == player_id ->
-        {:reply, {:ok, game}, game}
-
       player_1 == nil ->
         game = Map.put(game, :player_1, player_id)
         {:reply, {:ok, game}, game}
@@ -52,7 +49,7 @@ defmodule Wordual.Game do
         {:reply, {:ok, game}, game}
 
       true ->
-        {:reply, {:error, :game_full}, game}
+        {:reply, {:ok, game}, game}
     end
   end
 end
