@@ -8,6 +8,7 @@ defmodule WordualWeb.Router do
     plug :put_root_layout, {WordualWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :assign_player_id
   end
 
   pipeline :api do
@@ -18,6 +19,7 @@ defmodule WordualWeb.Router do
     pipe_through :browser
 
     live "/", GameLive, :index
+    live "/:game_id", GameLive, :index
   end
 
   # Other scopes may use custom stacks.
@@ -51,6 +53,15 @@ defmodule WordualWeb.Router do
       pipe_through :browser
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
+    end
+  end
+
+  defp assign_player_id(conn, _) do
+    if get_session(conn, :player_id) do
+      conn
+    else
+      player_id = Ecto.UUID.generate()
+      put_session(conn, :player_id, player_id)
     end
   end
 end

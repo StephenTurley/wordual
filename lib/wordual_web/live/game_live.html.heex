@@ -1,1 +1,5 @@
-<p><%= @game_id %></p>
+<%= if @game != nil do %>
+  <p>Game ID: <%= @game.game_id %></p>
+  <p>Player 1: <%= @game.player_1 %></p>
+  <p>Player 2: <%= @game.player_2 %></p>
+<% end %>

@@ -3,6 +3,8 @@ defmodule Wordual.Game do
   @registry Wordual.GameRegistry
   @supervisor Wordual.GameSupervisor
 
+  defstruct [:game_id, :player_1, :player_2]
+
   def start(game_id) do
     opts = [
       game_id: game_id,
@@ -26,6 +28,31 @@ defmodule Wordual.Game do
 
   @impl true
   def init(opts) do
-    {:ok, %{game_id: Keyword.fetch!(opts, :game_id)}}
+    {:ok, %__MODULE__{game_id: Keyword.fetch!(opts, :game_id)}}
+  end
+
+  def join(pid, player_id) do
+    GenServer.call(pid, {:join, player_id})
+  end
+
+  # Callbacks
+
+  @impl true
+  def handle_call({:join, player_id}, _from, %{player_1: player_1, player_2: player_2} = game) do
+    cond do
+      player_1 == player_id || player_2 == player_id ->
+        {:reply, {:ok, game}, game}
+
+      player_1 == nil ->
+        game = Map.put(game, :player_1, player_id)
+        {:reply, {:ok, game}, game}
+
+      player_2 == nil ->
+        game = Map.put(game, :player_2, player_id)
+        {:reply, {:ok, game}, game}
+
+      true ->
+        {:reply, {:error, :game_full}, game}
+    end
   end
 end

@@ -8,9 +8,14 @@ defmodule Wordual do
   """
   alias Wordual.Game
 
-  def start_game do
+  def start_game(player_id) do
     id = Ecto.UUID.generate()
     {:ok, pid} = Game.start(id)
-    {:ok, pid, id}
+    Game.join(pid, player_id)
+  end
+
+  def join_game(game_id, player_id) do
+    {:ok, pid} = Game.lookup(game_id)
+    Game.join(pid, player_id)
   end
 end
