@@ -48,12 +48,7 @@ defmodule Wordual.GameServer do
 
   @impl true
   def handle_call({:join, player_id}, _from, game) do
-    Phoenix.PubSub.broadcast!(
-      @pubsub,
-      game.id,
-      {:player_joined, player_id, game.id}
-    )
-
+    Phoenix.PubSub.broadcast!(@pubsub, game.id, {:player_joined, player_id, game.id})
     game = Game.join(game, player_id)
     {:reply, {:ok, game}, game}
   end

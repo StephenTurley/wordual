@@ -20,9 +20,7 @@ defmodule Wordual.Game do
 
   def other_player(game, player_id) do
     Map.keys(game.players)
-    |> IO.inspect(label: "keys")
     |> Enum.reject(&(&1 == player_id))
-    |> IO.inspect(label: "rejected")
     |> List.first()
   end
 
