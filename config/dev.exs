@@ -25,7 +25,8 @@ config :wordual, WordualWeb.Endpoint,
   secret_key_base: "G1DnZx8HLgmuYYhvq0FUYIqYqkzvvs85LzCgZUGePH0+QhRRtA1bhw7QraEEx9OP",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
 # ## SSL Support

@@ -1,15 +1,18 @@
 <%= if @game != nil do %>
-  <p>Game ID: <%= @game.id %></p>
+  <div class="container mx-auto columns-2 h-screen">
 
-  <div id="this_player">
-    <p>This player: <%= @this_player %></p>
-  </div>
+    <div id="this_player" class="h-full border p-2">
+      <p>This player: <%= @this_player %></p>
+      <.live_component module={WordualWeb.Live.BoardComponent} id={@this_player} game_id={@game.id} />
+    </div>
 
-  <div id="other_player">
-    <%= if other_player(@game, @this_player) == nil do %>
-      <p>Invite another player (send them this link): <span><%= Routes.game_url(@socket, :index, @game.id) %></span> </p>
-    <% else %>
-      <p>Other player: <%= other_player(@game, @this_player) %></p>
-    <% end %>
+    <div id="other_player" class="h-full border p-2">
+      <%= if other_player(@game, @this_player) == nil do %>
+        <p>Invite another player (send them this link): <span><%= Routes.game_url(@socket, :index, @game.id) %></span> </p>
+      <% else %>
+        <p>Other player: <%= other_player(@game, @this_player) %></p>
+        <.live_component module={WordualWeb.Live.BoardComponent} id={other_player(@game, @this_player)} game_id={@game.id} />
+      <% end %>
+    </div>
   </div>
 <% end %>
