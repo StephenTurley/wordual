@@ -2,6 +2,8 @@ defmodule WordualWeb.GameLive do
   use WordualWeb, :live_view
   require Logger
 
+  alias Wordual.Game
+
   @impl true
   def mount(%{"game_id" => game_id}, %{"player_id" => player_id}, socket) do
     if connected?(socket) do

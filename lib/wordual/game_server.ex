@@ -2,12 +2,13 @@ defmodule Wordual.GameServer do
   use GenServer
   @registry Wordual.GameRegistry
   @supervisor Wordual.GameSupervisor
+  @pubsub Wordual.PubSub
 
-  defstruct [:game_id, :player_1, :player_2]
+  alias Wordual.Game
 
   @impl true
   def init(opts) do
-    {:ok, %__MODULE__{game_id: Keyword.fetch!(opts, :game_id)}}
+    {:ok, %Game{id: Keyword.fetch!(opts, :game_id)}}
   end
 
   def start(game_id) do
@@ -36,7 +37,7 @@ defmodule Wordual.GameServer do
   end
 
   def subscribe(game_id) do
-    Phoenix.PubSub.subscribe(Wordual.PubSub, game_id)
+    Phoenix.PubSub.subscribe(@pubsub, game_id)
   end
 
   def get(pid) do
@@ -46,25 +47,15 @@ defmodule Wordual.GameServer do
   # Callbacks
 
   @impl true
-  def handle_call({:join, player_id}, _from, %{player_1: player_1, player_2: player_2} = game) do
+  def handle_call({:join, player_id}, _from, game) do
     Phoenix.PubSub.broadcast!(
-      Wordual.PubSub,
-      game.game_id,
-      {:player_joined, player_id, game.game_id}
+      @pubsub,
+      game.id,
+      {:player_joined, player_id, game.id}
     )
 
-    cond do
-      player_1 == nil ->
-        game = Map.put(game, :player_1, player_id)
-        {:reply, {:ok, game}, game}
-
-      player_2 == nil ->
-        game = Map.put(game, :player_2, player_id)
-        {:reply, {:ok, game}, game}
-
-      true ->
-        {:reply, {:ok, game}, game}
-    end
+    game = Game.join(game, player_id)
+    {:reply, {:ok, game}, game}
   end
 
   @impl true
