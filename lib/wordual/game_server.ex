@@ -1,4 +1,4 @@
-defmodule Wordual.Game do
+defmodule Wordual.GameServer do
   use GenServer
   @registry Wordual.GameRegistry
   @supervisor Wordual.GameSupervisor
