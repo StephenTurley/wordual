@@ -1,17 +1,22 @@
 defmodule Wordual.Game do
-  defstruct [:id, :word, players: %{}]
+  defstruct [:id, :state, :word, players: %{}]
 
   def init(id, word) do
-    %__MODULE__{id: id, word: word}
+    %__MODULE__{id: id, word: word, state: :starting}
   end
 
   def join(game, player_id) do
     cond do
+      Map.has_key?(game.players, player_id) ->
+        game
+
       map_size(game.players) == 2 ->
         game
 
-      Map.has_key?(game.players, player_id) ->
+      map_size(game.players) == 1 ->
         game
+        |> Map.put(:players, init_player(game.players, player_id))
+        |> Map.put(:state, :in_progress)
 
       true ->
         Map.put(game, :players, init_player(game.players, player_id))
