@@ -2,13 +2,11 @@ defmodule WordualWeb.GameLive do
   use WordualWeb, :live_view
   require Logger
 
-  alias Wordual.Game
-
   @impl true
   def mount(%{"game_id" => game_id}, %{"player_id" => player_id}, socket) do
     if connected?(socket) do
       {:ok, game} = Wordual.join_game(game_id, player_id)
-      {:ok, assign(socket, :game, game)}
+      {:ok, assigns(socket, game, player_id)}
     else
       {:ok, assign(socket, :game, nil)}
     end
@@ -18,10 +16,16 @@ defmodule WordualWeb.GameLive do
   def mount(_params, %{"player_id" => player_id}, socket) do
     if connected?(socket) do
       {:ok, game} = Wordual.start_game(player_id)
-      {:ok, assign(socket, :game, game)}
+      {:ok, assigns(socket, game, player_id)}
     else
       {:ok, assign(socket, :game, nil)}
     end
+  end
+
+  defp assigns(socket, game, player_id) do
+    socket
+    |> assign(:game, game)
+    |> assign(:this_player, player_id)
   end
 
   @impl true

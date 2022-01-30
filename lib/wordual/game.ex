@@ -1,5 +1,5 @@
 defmodule Wordual.Game do
-  defstruct [:id, :word, player_1: %{id: nil, board: nil}, player_2: %{id: nil, board: nil}]
+  defstruct [:id, :word, players: %{}]
 
   def init(id, word) do
     %__MODULE__{id: id, word: word}
@@ -7,22 +7,27 @@ defmodule Wordual.Game do
 
   def join(game, player_id) do
     cond do
-      game.player_1.id == nil ->
-        init_player(game, player_id, :player_1)
-
-      game.player_1.id == player_id ->
+      map_size(game.players) == 2 ->
         game
 
-      game.player_2.id == nil ->
-        init_player(game, player_id, :player_2)
+      Map.has_key?(game.players, player_id) ->
+        game
 
       true ->
-        game
+        Map.put(game, :players, init_player(game.players, player_id))
     end
   end
 
-  defp init_player(game, player_id, player) do
-    Map.put(game, player, %{id: player_id, board: init_board()})
+  def other_player(game, player_id) do
+    Map.keys(game.players)
+    |> IO.inspect(label: "keys")
+    |> Enum.reject(&(&1 == player_id))
+    |> IO.inspect(label: "rejected")
+    |> List.first()
+  end
+
+  defp init_player(players, player_id) do
+    Map.put(players, player_id, init_board())
   end
 
   defp init_board() do

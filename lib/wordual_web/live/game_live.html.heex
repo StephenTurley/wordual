@@ -1,14 +1,15 @@
 <%= if @game != nil do %>
   <p>Game ID: <%= @game.id %></p>
 
-  <div id="player_1">
-    <p>Player 1: <%= @game.player_1.id %></p>
+  <div id="this_player">
+    <p>This player: <%= @this_player %></p>
   </div>
 
-  <div id="player_2">
-    <p>Player 2: <%= @game.player_2.id %></p>
-    <%= if @game.player_2.id == nil do %>
-      <p>Invite: <span><%= Routes.game_url(@socket, :index, @game.id) %></span> </p>
+  <div id="other_player">
+    <%= if other_player(@game, @this_player) == nil do %>
+      <p>Invite another player (send them this link): <span><%= Routes.game_url(@socket, :index, @game.id) %></span> </p>
+    <% else %>
+      <p>Other player: <%= other_player(@game, @this_player) %></p>
     <% end %>
   </div>
 <% end %>
