@@ -1,5 +1,6 @@
 defmodule WordualWeb.GameLive do
   use WordualWeb, :live_view
+  require Logger
 
   @impl true
   def mount(%{"game_id" => game_id}, %{"player_id" => player_id}, socket) do
@@ -19,5 +20,13 @@ defmodule WordualWeb.GameLive do
     else
       {:ok, assign(socket, :game, nil)}
     end
+  end
+
+  @impl true
+  def handle_info({:player_joined, player_id, game_id}, socket) do
+    Logger.info("Player: #{player_id} joined game: #{game_id}")
+    {:ok, game} = Wordual.get_game(game_id)
+
+    {:noreply, assign(socket, :game, game)}
   end
 end

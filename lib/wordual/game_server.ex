@@ -5,6 +5,11 @@ defmodule Wordual.GameServer do
 
   defstruct [:game_id, :player_1, :player_2]
 
+  @impl true
+  def init(opts) do
+    {:ok, %__MODULE__{game_id: Keyword.fetch!(opts, :game_id)}}
+  end
+
   def start(game_id) do
     opts = [
       game_id: game_id,
@@ -26,19 +31,28 @@ defmodule Wordual.GameServer do
     GenServer.start_link(__MODULE__, opts, name: name)
   end
 
-  @impl true
-  def init(opts) do
-    {:ok, %__MODULE__{game_id: Keyword.fetch!(opts, :game_id)}}
-  end
-
   def join(pid, player_id) do
     GenServer.call(pid, {:join, player_id})
+  end
+
+  def subscribe(game_id) do
+    Phoenix.PubSub.subscribe(Wordual.PubSub, game_id)
+  end
+
+  def get(pid) do
+    GenServer.call(pid, :get)
   end
 
   # Callbacks
 
   @impl true
   def handle_call({:join, player_id}, _from, %{player_1: player_1, player_2: player_2} = game) do
+    Phoenix.PubSub.broadcast!(
+      Wordual.PubSub,
+      game.game_id,
+      {:player_joined, player_id, game.game_id}
+    )
+
     cond do
       player_1 == nil ->
         game = Map.put(game, :player_1, player_id)
@@ -52,4 +66,7 @@ defmodule Wordual.GameServer do
         {:reply, {:ok, game}, game}
     end
   end
+
+  @impl true
+  def handle_call(:get, _from, game), do: {:reply, {:ok, game}, game}
 end

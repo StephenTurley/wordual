@@ -9,13 +9,20 @@ defmodule Wordual do
   alias Wordual.GameServer
 
   def start_game(player_id) do
-    id = Ecto.UUID.generate()
-    {:ok, pid} = GameServer.start(id)
+    game_id = Ecto.UUID.generate()
+    {:ok, pid} = GameServer.start(game_id)
+    GameServer.subscribe(game_id)
     GameServer.join(pid, player_id)
   end
 
   def join_game(game_id, player_id) do
     {:ok, pid} = GameServer.lookup(game_id)
+    GameServer.subscribe(game_id)
     GameServer.join(pid, player_id)
+  end
+
+  def get_game(game_id) do
+    {:ok, pid} = GameServer.lookup(game_id)
+    GameServer.get(pid)
   end
 end
