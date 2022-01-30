@@ -3,6 +3,7 @@ defmodule WordualWeb.GameLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, _pid, game_id} = Wordual.start_game()
+    {:ok, assign(socket, :game_id, game_id)}
   end
 end

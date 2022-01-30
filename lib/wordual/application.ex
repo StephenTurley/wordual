@@ -15,9 +15,11 @@ defmodule Wordual.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Wordual.PubSub},
       # Start the Endpoint (http/https)
-      WordualWeb.Endpoint
+      WordualWeb.Endpoint,
       # Start a worker by calling: Wordual.Worker.start_link(arg)
       # {Wordual.Worker, arg}
+      {Registry, keys: :unique, name: Wordual.GameRegistry},
+      {DynamicSupervisor, name: Wordual.GameSupervisor, strategy: :one_for_one}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

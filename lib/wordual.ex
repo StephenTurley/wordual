@@ -6,4 +6,11 @@ defmodule Wordual do
   Contexts are also responsible for managing your data, regardless
   if it comes from the database, an external API or others.
   """
+  alias Wordual.Game
+
+  def start_game do
+    id = Ecto.UUID.generate()
+    {:ok, pid} = Game.start(id)
+    {:ok, pid, id}
+  end
 end
