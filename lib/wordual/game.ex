@@ -5,6 +5,26 @@ defmodule Wordual.Game do
     %__MODULE__{id: id, word: word, state: :starting}
   end
 
+  def add_char(%{state: :in_progress} = game, player_id, char) do
+    row =
+      game.players[player_id]
+      |> List.first()
+      |> List.replace_at(0, %{char: char})
+
+    board =
+      game.players[player_id]
+      |> List.replace_at(0, row)
+
+    players = Map.put(game.players, player_id, board)
+    game = Map.put(game, :players, players)
+
+    {:ok, game}
+  end
+
+  def add_char(_game, _player_id, _char) do
+    {:error, :not_started}
+  end
+
   def join(game, player_id) do
     cond do
       Map.has_key?(game.players, player_id) ->

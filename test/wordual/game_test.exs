@@ -13,6 +13,29 @@ defmodule Wordual.GameTest do
     end
   end
 
+  describe "add_char/3" do
+    test "it should return an error if the game has not started" do
+      result =
+        Game.init("abc123", "swole")
+        |> Game.join("flerpn1")
+        |> Game.add_char("flerpn1", "a")
+
+      assert result = {:error, :not_started}
+    end
+
+    test "it should add a letter to the current row" do
+      {:ok, result} =
+        Game.init("abc123", "swole")
+        |> Game.join("flerpn1")
+        |> Game.join("flerpn2")
+        |> Game.add_char("flerpn1", "a")
+
+      first_row = List.first(result.players["flerpn1"])
+
+      assert first_row == [%{char: "a"}, %{}, %{}, %{}, %{}]
+    end
+  end
+
   describe "join/2" do
     test "It initializes the board for the players" do
       result =
