@@ -1,6 +1,8 @@
 defmodule Wordual.GameTest do
   use ExUnit.Case
 
+  import Wordual.Test.Support.Assertions
+
   alias Wordual.Game
 
   describe "init/2" do
@@ -9,11 +11,12 @@ defmodule Wordual.GameTest do
       assert result.id == "abc123"
       assert result.word == "swole"
       assert result.state == :starting
-      assert result.players == %{}
+      assert result.boards == %{}
     end
   end
 
   describe "add_char/3" do
+    @tag :skip
     test "it should return an error if the game has not started" do
       result =
         Game.init("abc123", "swole")
@@ -23,6 +26,7 @@ defmodule Wordual.GameTest do
       assert result = {:error, :not_started}
     end
 
+    @tag :skip
     test "it should add a letter to the current row" do
       {:ok, result} =
         Game.init("abc123", "swole")
@@ -30,7 +34,7 @@ defmodule Wordual.GameTest do
         |> Game.join("flerpn2")
         |> Game.add_char("flerpn1", "a")
 
-      first_row = List.first(result.players["flerpn1"])
+      first_row = List.first(result.boards["flerpn1"])
 
       assert first_row == [%{char: "a"}, %{}, %{}, %{}, %{}]
     end
@@ -43,21 +47,13 @@ defmodule Wordual.GameTest do
         |> Game.join("flerpn1")
         |> Game.join("flerpn2")
 
-      assert Map.get(result.players, "flerpn1") == [
-               [%{}, %{}, %{}, %{}, %{}],
-               [%{}, %{}, %{}, %{}, %{}],
-               [%{}, %{}, %{}, %{}, %{}],
-               [%{}, %{}, %{}, %{}, %{}],
-               [%{}, %{}, %{}, %{}, %{}]
-             ]
+      result.boards
+      |> Map.get("flerpn1")
+      |> is_initiailzied_board()
 
-      assert Map.get(result.players, "flerpn2") == [
-               [%{}, %{}, %{}, %{}, %{}],
-               [%{}, %{}, %{}, %{}, %{}],
-               [%{}, %{}, %{}, %{}, %{}],
-               [%{}, %{}, %{}, %{}, %{}],
-               [%{}, %{}, %{}, %{}, %{}]
-             ]
+      result.boards
+      |> Map.get("flerpn2")
+      |> is_initiailzied_board()
     end
 
     test "It only allows the player to join once" do
@@ -66,7 +62,7 @@ defmodule Wordual.GameTest do
         |> Game.join("flerpn1")
         |> Game.join("flerpn1")
 
-      assert Map.keys(result.players) == ["flerpn1"]
+      assert Map.keys(result.boards) == ["flerpn1"]
     end
 
     test "It doesn't allow a 3rd person to join" do
@@ -76,7 +72,7 @@ defmodule Wordual.GameTest do
         |> Game.join("flerpn2")
         |> Game.join("flerpn3")
 
-      assert Map.keys(result.players) == ["flerpn1", "flerpn2"]
+      assert Map.keys(result.boards) == ["flerpn1", "flerpn2"]
     end
 
     test "It changes the state to :in_progress once both players have joined" do

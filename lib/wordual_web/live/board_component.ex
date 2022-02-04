@@ -6,16 +6,16 @@ defmodule WordualWeb.Live.BoardComponent do
 
     board =
       game
-      |> Map.get(:players)
+      |> Map.get(:boards)
       |> Map.get(player_id)
 
     assigns = %{board: board}
 
     ~H"""
     <div class="board">
-    <%= for row <- @board do %>
+    <%= for row <- @board.rows do %>
       <div class="row grid grid-cols-5">
-      <%= for _tile <- row do %>
+      <%= for _tile <- row.tiles do %>
         <div class="tile border">A</div>
       <% end %>
       </div>
