@@ -4,6 +4,7 @@ defmodule Wordual.GameTest do
   import Wordual.Test.Support.Assertions
 
   alias Wordual.Game
+  alias Wordual.Row
 
   describe "init/2" do
     test "it starts in the :starting state" do
@@ -16,17 +17,13 @@ defmodule Wordual.GameTest do
   end
 
   describe "add_char/3" do
-    @tag :skip
     test "it should return an error if the game has not started" do
-      result =
-        Game.init("abc123", "swole")
-        |> Game.join("flerpn1")
-        |> Game.add_char("flerpn1", "a")
-
-      assert result = {:error, :not_started}
+      assert {:error, :not_started} ==
+               Game.init("abc123", "swole")
+               |> Game.join("flerpn1")
+               |> Game.add_char("flerpn1", "a")
     end
 
-    @tag :skip
     test "it should add a letter to the current row" do
       {:ok, result} =
         Game.init("abc123", "swole")
@@ -34,9 +31,28 @@ defmodule Wordual.GameTest do
         |> Game.join("flerpn2")
         |> Game.add_char("flerpn1", "a")
 
-      first_row = List.first(result.boards["flerpn1"])
+      first_row =
+        result.boards
+        |> Map.get("flerpn1")
+        |> Map.get(:rows)
+        |> List.first()
 
-      assert first_row == [%{char: "a"}, %{}, %{}, %{}, %{}]
+      assert {:ok, first_row} == Row.add_char(Row.init(), "a")
+    end
+
+    test "it returns an error when the row is full" do
+      game =
+        Game.init("abc123", "swole")
+        |> Game.join("flerpn1")
+        |> Game.join("flerpn2")
+
+      {_, game} =
+        Enum.map_reduce(1..5, game, fn i, game ->
+          {:ok, game} = Game.add_char(game, "flerpn1", "a")
+          {i, game}
+        end)
+
+      assert {:error, :row_full} == Game.add_char(game, "flerpn1", "a")
     end
   end
 

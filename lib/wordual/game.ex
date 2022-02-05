@@ -8,19 +8,20 @@ defmodule Wordual.Game do
   end
 
   def add_char(%{state: :in_progress} = game, player_id, char) do
-    row =
-      game.boards[player_id]
-      |> List.first()
-      |> List.replace_at(0, %{char: char})
+    game.boards[player_id]
+    |> Board.add_char(char)
+    |> case do
+      {:ok, board} ->
+        {:ok,
+         game
+         |> Map.replace!(
+           :boards,
+           Map.replace!(game.boards, player_id, board)
+         )}
 
-    board =
-      game.boards[player_id]
-      |> List.replace_at(0, row)
-
-    boards = Map.put(game.boards, player_id, board)
-    game = Map.put(game, :boards, boards)
-
-    {:ok, game}
+      err ->
+        err
+    end
   end
 
   def add_char(_game, _player_id, _char) do

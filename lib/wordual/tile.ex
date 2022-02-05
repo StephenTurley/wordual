@@ -4,4 +4,8 @@ defmodule Wordual.Tile do
   def init() do
     %__MODULE__{state: :empty}
   end
+
+  def for_char(char) do
+    %__MODULE__{state: :filled, char: char}
+  end
 end

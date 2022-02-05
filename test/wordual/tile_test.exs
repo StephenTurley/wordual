@@ -9,4 +9,13 @@ defmodule Wordual.TileTest do
       assert result == %Tile{state: :empty, char: nil}
     end
   end
+
+  describe "for_char/1" do
+    test "should create a tile with the char" do
+      %Tile{state: state, char: char} = Tile.for_char("b")
+
+      assert state == :filled
+      assert char == "b"
+    end
+  end
 end
