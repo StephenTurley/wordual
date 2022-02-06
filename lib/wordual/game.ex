@@ -8,19 +8,27 @@ defmodule Wordual.Game do
   end
 
   def add_char(%{state: :in_progress} = game, player_id, char) do
+    update_board(game, player_id, &Board.add_char(&1, char))
+  end
+
+  def add_char(_game, _player_id, _char), do: {:error, :not_started}
+
+  def clear_char(%{state: :in_progress} = game, player_id) do
+    update_board(game, player_id, &Board.clear_char/1)
+  end
+
+  def clear_char(_game, _player_id), do: {:error, :not_started}
+
+  defp update_board(game, player_id, updater) do
     game.boards[player_id]
-    |> Board.add_char(char)
+    |> updater.()
     |> case do
       {:ok, board} ->
-        {:ok, game |> Map.replace!(:boards, Map.replace!(game.boards, player_id, board))}
+        {:ok, Map.replace!(game, :boards, Map.replace!(game.boards, player_id, board))}
 
       err ->
         err
     end
-  end
-
-  def add_char(_game, _player_id, _char) do
-    {:error, :not_started}
   end
 
   def join(game, player_id) do

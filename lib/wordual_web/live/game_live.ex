@@ -38,13 +38,13 @@ defmodule WordualWeb.GameLive do
 
   @impl true
   def handle_event("add_char", %{"key" => key}, socket) do
-    with true <- valid_key?(key),
+    with {:ok, action} <- action(key),
          player_id <- socket.assigns.this_player,
          {:ok, game} <-
            socket.assigns
            |> Map.get(:game)
            |> Map.get(:id)
-           |> Wordual.add_char(player_id, key) do
+           |> action.(player_id) do
       Logger.info("Player #{player_id} pressed key: #{key}")
       {:noreply, assign(clear_flash(socket), :game, game)}
     else
@@ -61,7 +61,15 @@ defmodule WordualWeb.GameLive do
     end
   end
 
-  defp valid_key?(key) do
+  def valid_letter?(key) do
     String.length(key) == 1 && String.match?(key, ~r/[a-z]/)
+  end
+
+  defp action(key) do
+    cond do
+      key == "Backspace" -> {:ok, &Wordual.clear_char/2}
+      valid_letter?(key) -> {:ok, &Wordual.add_char(&1, &2, key)}
+      true -> {:error, :invalid_key}
+    end
   end
 end

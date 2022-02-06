@@ -56,6 +56,38 @@ defmodule Wordual.GameTest do
     end
   end
 
+  describe "clear_char/2" do
+    test "it should return an error if the game has not started" do
+      assert {:error, :not_started} ==
+               Game.init("abc123", "swole")
+               |> Game.join("flerpn1")
+               |> Game.clear_char("flerpn1")
+    end
+
+    test "it should return an error when the row is empty" do
+      assert {:error, :row_empty} ==
+               Game.init("abc123", "flerp")
+               |> Game.join("flerpn1")
+               |> Game.join("flerpn2")
+               |> Game.clear_char("flerpn1")
+    end
+
+    test "it should clear the char" do
+      {:ok, game} =
+        Game.init("abc123", "flerp")
+        |> Game.join("flerpn1")
+        |> Game.join("flerpn2")
+        |> Game.add_char("flerpn1", "a")
+
+      {:ok, game} = Game.clear_char(game, "flerpn1")
+
+      game
+      |> Map.get(:boards)
+      |> Map.get("flerpn1")
+      |> is_initiailzied_board()
+    end
+  end
+
   describe "join/2" do
     test "It initializes the board for the players" do
       result =

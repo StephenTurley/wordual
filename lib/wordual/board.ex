@@ -9,10 +9,18 @@ defmodule Wordual.Board do
     }
   end
 
-  def add_char(%{rows: rows, current_row: current_row}, char) do
+  def add_char(row, char) do
+    update_row(row, &Row.add_char(&1, char))
+  end
+
+  def clear_char(row) do
+    update_row(row, &Row.clear_char/1)
+  end
+
+  defp update_row(%{rows: rows, current_row: current_row}, updater) do
     rows
     |> Enum.at(current_row)
-    |> Row.add_char(char)
+    |> updater.()
     |> case do
       {:ok, row} ->
         {:ok,

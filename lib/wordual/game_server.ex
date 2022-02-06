@@ -48,6 +48,10 @@ defmodule Wordual.GameServer do
     GenServer.call(pid, {:add_char, player_id, char})
   end
 
+  def clear_char(pid, player_id) do
+    GenServer.call(pid, {:clear_char, player_id})
+  end
+
   # Callbacks
 
   @impl true
@@ -62,9 +66,18 @@ defmodule Wordual.GameServer do
 
   @impl true
   def handle_call({:add_char, player_id, char}, _from, game) do
+    update_game(game, player_id, Game.add_char(game, player_id, char))
+  end
+
+  @impl true
+  def handle_call({:clear_char, player_id}, _from, game) do
+    update_game(game, player_id, Game.clear_char(game, player_id))
+  end
+
+  defp update_game(game, player_id, result) do
     Phoenix.PubSub.broadcast!(@pubsub, game.id, {:game_updated, player_id, game.id})
 
-    case Game.add_char(game, player_id, char) do
+    case result do
       {:ok, game} ->
         {:reply, {:ok, game}, game}
 

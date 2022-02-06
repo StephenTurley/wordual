@@ -20,4 +20,16 @@ defmodule Wordual.Row do
        tiles: List.replace_at(tiles, current_tile, Tile.for_char(char))
      }}
   end
+
+  def clear_char(%{current_tile: 0}), do: {:error, :row_empty}
+
+  def clear_char(%{current_tile: current_tile, tiles: tiles}) do
+    current_tile = current_tile - 1
+
+    {:ok,
+     %__MODULE__{
+       current_tile: current_tile,
+       tiles: List.replace_at(tiles, current_tile, Tile.init())
+     }}
+  end
 end
