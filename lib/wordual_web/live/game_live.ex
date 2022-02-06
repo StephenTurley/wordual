@@ -29,10 +29,32 @@ defmodule WordualWeb.GameLive do
   end
 
   @impl true
-  def handle_info({:player_joined, player_id, game_id}, socket) do
-    Logger.info("Player: #{player_id} joined game: #{game_id}")
+  def handle_info({:game_updated, player_id, game_id}, socket) do
+    Logger.info("Player: #{player_id} updated game: #{game_id}")
     {:ok, game} = Wordual.get_game(game_id)
 
     {:noreply, assign(socket, :game, game)}
+  end
+
+  @impl true
+  def handle_event("add_char", %{"key" => key}, socket) do
+    with true <- valid_key?(key),
+         player_id <- socket.assigns.this_player,
+         {:ok, game} <-
+           socket.assigns
+           |> Map.get(:game)
+           |> Map.get(:id)
+           |> Wordual.add_char(player_id, key) do
+      Logger.info("Player #{player_id} pressed key: #{key}")
+      IO.inspect(game)
+      {:noreply, assign(socket, :game, game)}
+    else
+      _ ->
+        {:noreply, socket}
+    end
+  end
+
+  defp valid_key?(key) do
+    String.length(key) == 1 && String.match?(key, ~r/[a-z]/)
   end
 end

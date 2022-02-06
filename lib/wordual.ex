@@ -25,4 +25,9 @@ defmodule Wordual do
     {:ok, pid} = GameServer.lookup(game_id)
     GameServer.get(pid)
   end
+
+  def add_char(game_id, player_id, char) do
+    {:ok, pid} = GameServer.lookup(game_id)
+    GameServer.add_char(pid, player_id, char)
+  end
 end

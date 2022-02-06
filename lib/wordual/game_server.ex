@@ -44,15 +44,32 @@ defmodule Wordual.GameServer do
     GenServer.call(pid, :get)
   end
 
+  def add_char(pid, player_id, char) do
+    GenServer.call(pid, {:add_char, player_id, char})
+  end
+
   # Callbacks
 
   @impl true
   def handle_call({:join, player_id}, _from, game) do
-    Phoenix.PubSub.broadcast!(@pubsub, game.id, {:player_joined, player_id, game.id})
+    Phoenix.PubSub.broadcast!(@pubsub, game.id, {:game_updated, player_id, game.id})
     game = Game.join(game, player_id)
     {:reply, {:ok, game}, game}
   end
 
   @impl true
   def handle_call(:get, _from, game), do: {:reply, {:ok, game}, game}
+
+  @impl true
+  def handle_call({:add_char, player_id, char}, _from, game) do
+    Phoenix.PubSub.broadcast!(@pubsub, game.id, {:game_updated, player_id, game.id})
+
+    case Game.add_char(game, player_id, char) do
+      {:ok, game} ->
+        {:reply, {:ok, game}, game}
+
+      error ->
+        {:reply, error, game}
+    end
+  end
 end
