@@ -46,9 +46,16 @@ defmodule WordualWeb.GameLive do
            |> Map.get(:id)
            |> Wordual.add_char(player_id, key) do
       Logger.info("Player #{player_id} pressed key: #{key}")
-      IO.inspect(game)
-      {:noreply, assign(socket, :game, game)}
+      {:noreply, assign(clear_flash(socket), :game, game)}
     else
+      {:error, :row_full} ->
+        socket = put_flash(socket, :error, "The row is full")
+        {:noreply, socket}
+
+      {:error, :not_started} ->
+        socket = put_flash(socket, :error, "Waiting for the other player")
+        {:noreply, socket}
+
       _ ->
         {:noreply, socket}
     end

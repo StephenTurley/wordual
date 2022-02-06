@@ -12,12 +12,7 @@ defmodule Wordual.Game do
     |> Board.add_char(char)
     |> case do
       {:ok, board} ->
-        {:ok,
-         game
-         |> Map.replace!(
-           :boards,
-           Map.replace!(game.boards, player_id, board)
-         )}
+        {:ok, game |> Map.replace!(:boards, Map.replace!(game.boards, player_id, board))}
 
       err ->
         err
