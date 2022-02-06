@@ -5,10 +5,15 @@ defmodule Wordual.GameServer do
   @pubsub Wordual.PubSub
 
   alias Wordual.Game
+  alias Wordual.Words
 
   @impl true
   def init(opts) do
-    {:ok, %Game{id: Keyword.fetch!(opts, :game_id)}}
+    {:ok,
+     %Game{
+       id: Keyword.fetch!(opts, :game_id),
+       word: Words.random_word()
+     }}
   end
 
   def start(game_id) do
@@ -52,6 +57,10 @@ defmodule Wordual.GameServer do
     GenServer.call(pid, {:clear_char, player_id})
   end
 
+  def submit_row(pid, player_id) do
+    GenServer.call(pid, {:submit_row, player_id})
+  end
+
   # Callbacks
 
   @impl true
@@ -72,6 +81,11 @@ defmodule Wordual.GameServer do
   @impl true
   def handle_call({:clear_char, player_id}, _from, game) do
     update_game(game, player_id, Game.clear_char(game, player_id))
+  end
+
+  @impl true
+  def handle_call({:submit_row, player_id}, _from, game) do
+    update_game(game, player_id, Game.submit_row(game, player_id))
   end
 
   defp update_game(game, player_id, result) do

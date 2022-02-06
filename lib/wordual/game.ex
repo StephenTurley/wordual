@@ -19,18 +19,6 @@ defmodule Wordual.Game do
 
   def clear_char(_game, _player_id), do: {:error, :not_started}
 
-  defp update_board(game, player_id, updater) do
-    game.boards[player_id]
-    |> updater.()
-    |> case do
-      {:ok, board} ->
-        {:ok, Map.replace!(game, :boards, Map.replace!(game.boards, player_id, board))}
-
-      err ->
-        err
-    end
-  end
-
   def join(game, player_id) do
     cond do
       Map.has_key?(game.boards, player_id) ->
@@ -49,6 +37,8 @@ defmodule Wordual.Game do
     end
   end
 
+  def submit_row(game, _player_id), do: {:ok, game}
+
   def other_player(game, player_id) do
     Map.keys(game.boards)
     |> Enum.reject(&(&1 == player_id))
@@ -57,5 +47,17 @@ defmodule Wordual.Game do
 
   defp init_player(boards, player_id) do
     Map.put(boards, player_id, Board.init())
+  end
+
+  defp update_board(game, player_id, updater) do
+    game.boards[player_id]
+    |> updater.()
+    |> case do
+      {:ok, board} ->
+        {:ok, Map.replace!(game, :boards, Map.replace!(game.boards, player_id, board))}
+
+      err ->
+        err
+    end
   end
 end

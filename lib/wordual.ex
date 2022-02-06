@@ -35,4 +35,9 @@ defmodule Wordual do
     {:ok, pid} = GameServer.lookup(game_id)
     GameServer.clear_char(pid, player_id)
   end
+
+  def submit_row(game_id, player_id) do
+    {:ok, pid} = GameServer.lookup(game_id)
+    GameServer.submit_row(pid, player_id)
+  end
 end

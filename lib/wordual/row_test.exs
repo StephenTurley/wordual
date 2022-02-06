@@ -9,13 +9,7 @@ defmodule Wordual.RowTest do
       result = Row.init()
       assert result.current_tile == 0
 
-      assert result.tiles == [
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil}
-             ]
+      assert result.tiles == [Tile.init(), Tile.init(), Tile.init(), Tile.init(), Tile.init()]
     end
   end
 
@@ -28,22 +22,22 @@ defmodule Wordual.RowTest do
       assert result.current_tile == 1
 
       assert result.tiles == [
-               %Tile{state: :filled, char: "a"},
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil}
+               Tile.for_char("a"),
+               Tile.init(),
+               Tile.init(),
+               Tile.init(),
+               Tile.init()
              ]
 
       {:ok, result} = Row.add_char(result, "b")
       assert result.current_tile == 2
 
       assert result.tiles == [
-               %Tile{state: :filled, char: "a"},
-               %Tile{state: :filled, char: "b"},
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil},
-               %Tile{state: :empty, char: nil}
+               Tile.for_char("a"),
+               Tile.for_char("b"),
+               Tile.init(),
+               Tile.init(),
+               Tile.init()
              ]
     end
 
@@ -52,11 +46,11 @@ defmodule Wordual.RowTest do
         %Row{
           current_tile: 5,
           tiles: [
-            %Tile{state: :filled, char: "a"},
-            %Tile{state: :filled, char: "b"},
-            %Tile{state: :filled, char: "c"},
-            %Tile{state: :filled, char: "d"},
-            %Tile{state: :filled, char: "e"}
+            Tile.for_char("a"),
+            Tile.for_char("b"),
+            Tile.for_char("c"),
+            Tile.for_char("d"),
+            Tile.for_char("e")
           ]
         }
         |> Row.add_char("f")
@@ -70,11 +64,11 @@ defmodule Wordual.RowTest do
       row = %Row{
         current_tile: 5,
         tiles: [
-          %Tile{state: :filled, char: "a"},
-          %Tile{state: :filled, char: "b"},
-          %Tile{state: :filled, char: "c"},
-          %Tile{state: :filled, char: "d"},
-          %Tile{state: :filled, char: "e"}
+          Tile.for_char("a"),
+          Tile.for_char("b"),
+          Tile.for_char("c"),
+          Tile.for_char("d"),
+          Tile.for_char("e")
         ]
       }
 
@@ -83,24 +77,18 @@ defmodule Wordual.RowTest do
       assert result.current_tile == 4
 
       assert result.tiles == [
-               %Tile{state: :filled, char: "a"},
-               %Tile{state: :filled, char: "b"},
-               %Tile{state: :filled, char: "c"},
-               %Tile{state: :filled, char: "d"},
-               %Tile{state: :empty, char: nil}
+               Tile.for_char("a"),
+               Tile.for_char("b"),
+               Tile.for_char("c"),
+               Tile.for_char("d"),
+               Tile.init()
              ]
     end
 
     test "it returns an error when the row is empty" do
       row = %Row{
         current_tile: 0,
-        tiles: [
-          %Tile{state: :empty, char: nil},
-          %Tile{state: :empty, char: nil},
-          %Tile{state: :empty, char: nil},
-          %Tile{state: :empty, char: nil},
-          %Tile{state: :empty, char: nil}
-        ]
+        tiles: [Tile.init(), Tile.init(), Tile.init(), Tile.init(), Tile.init()]
       }
 
       assert {:error, :row_empty} = Row.clear_char(row)

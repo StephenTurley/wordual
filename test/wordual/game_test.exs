@@ -88,6 +88,9 @@ defmodule Wordual.GameTest do
     end
   end
 
+  describe "submit_row/2" do
+  end
+
   describe "join/2" do
     test "It initializes the board for the players" do
       result =

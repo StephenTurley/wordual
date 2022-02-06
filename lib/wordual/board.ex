@@ -5,7 +5,7 @@ defmodule Wordual.Board do
   def init() do
     %__MODULE__{
       current_row: 0,
-      rows: Enum.map(0..4, fn _ -> Row.init() end)
+      rows: Enum.map(0..5, fn _ -> Row.init() end)
     }
   end
 
