@@ -71,6 +71,51 @@ defmodule Wordual.RowTest do
 
   describe "check_row/2" do
     test "should return an error when the word is invalid" do
+      assert {:error, :invalid_word} = Row.check_row(row("flerp"), "swole")
+    end
+
+    test "should return an error if the word is not 5 letter" do
+      assert {:error, :incomplete_word} = Row.check_row(row("fler"), "swole")
+    end
+
+    test "should return correct when the word is correct" do
+      assert {:ok, :correct} = Row.check_row(row("swole"), "swole")
+    end
+
+    test "should return valid when the word is valid but not correct" do
+      assert {:ok, :valid_word} = Row.check_row(row("wrist"), "swole")
+    end
+  end
+
+  describe "analyze_row/2" do
+    test "should set all tiles to absent when no letters match" do
+      result =
+        row("click")
+        |> Row.analyze_row("start")
+        |> Map.get(:tiles)
+        |> Enum.map(&Map.get(&1, :state))
+
+      assert result == [:absent, :absent, :absent, :absent, :absent]
+    end
+
+    test "should set tiles that are in the word but not in the correct spot to present" do
+      result =
+        row("cramp")
+        |> Row.analyze_row("picks")
+        |> Map.get(:tiles)
+        |> Enum.map(&Map.get(&1, :state))
+
+      assert result == [:present, :absent, :absent, :absent, :present]
+    end
+
+    test "should set tiles that are in the correct spot to correct" do
+      result =
+        row("flame")
+        |> Row.analyze_row("blame")
+        |> Map.get(:tiles)
+        |> Enum.map(&Map.get(&1, :state))
+
+      assert result == [:absent, :correct, :correct, :correct, :correct]
     end
   end
 end

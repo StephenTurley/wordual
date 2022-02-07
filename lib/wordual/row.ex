@@ -3,6 +3,7 @@ defmodule Wordual.Row do
   @max_tiles 5
 
   alias Wordual.Tile
+  alias Wordual.Words
 
   def init() do
     %__MODULE__{
@@ -31,5 +32,32 @@ defmodule Wordual.Row do
        current_tile: current_tile,
        tiles: List.replace_at(tiles, current_tile, Tile.init())
      }}
+  end
+
+  def check_row(%{current_tile: current_tile}, _word) when current_tile < @max_tiles,
+    do: {:error, :incomplete_word}
+
+  def check_row(%{tiles: tiles}, word) do
+    word_to_check = Enum.map_join(tiles, "", &Map.get(&1, :char))
+
+    cond do
+      word_to_check == word -> {:ok, :correct}
+      Words.valid_word?(word_to_check) -> {:ok, :valid_word}
+      true -> {:error, :invalid_word}
+    end
+  end
+
+  def analyze_row(row, word) do
+    Map.replace!(
+      row,
+      :tiles,
+      Enum.with_index(row.tiles, fn tile, index ->
+        cond do
+          String.at(word, index) == tile.char -> Tile.is_correct(tile)
+          String.contains?(word, tile.char) -> Tile.is_present(tile)
+          true -> Tile.is_absent(tile)
+        end
+      end)
+    )
   end
 end
