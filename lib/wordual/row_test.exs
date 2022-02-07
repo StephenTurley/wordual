@@ -1,5 +1,6 @@
 defmodule Wordual.RowTest do
   use ExUnit.Case
+  import Wordual.Test.Support.Factories
 
   alias Wordual.Row
   alias Wordual.Tile
@@ -42,18 +43,7 @@ defmodule Wordual.RowTest do
     end
 
     test "it returns an error when the row is full" do
-      result =
-        %Row{
-          current_tile: 5,
-          tiles: [
-            Tile.for_char("a"),
-            Tile.for_char("b"),
-            Tile.for_char("c"),
-            Tile.for_char("d"),
-            Tile.for_char("e")
-          ]
-        }
-        |> Row.add_char("f")
+      result = Row.add_char(row("flerp"), "n")
 
       assert result == {:error, :row_full}
     end
@@ -61,18 +51,7 @@ defmodule Wordual.RowTest do
 
   describe "clear_char/1" do
     test "it clears the current tile" do
-      row = %Row{
-        current_tile: 5,
-        tiles: [
-          Tile.for_char("a"),
-          Tile.for_char("b"),
-          Tile.for_char("c"),
-          Tile.for_char("d"),
-          Tile.for_char("e")
-        ]
-      }
-
-      {:ok, result} = Row.clear_char(row)
+      {:ok, result} = Row.clear_char(row("abcde"))
 
       assert result.current_tile == 4
 
@@ -86,12 +65,12 @@ defmodule Wordual.RowTest do
     end
 
     test "it returns an error when the row is empty" do
-      row = %Row{
-        current_tile: 0,
-        tiles: [Tile.init(), Tile.init(), Tile.init(), Tile.init(), Tile.init()]
-      }
+      assert {:error, :row_empty} = Row.clear_char(Row.init())
+    end
+  end
 
-      assert {:error, :row_empty} = Row.clear_char(row)
+  describe "check_row/2" do
+    test "should return an error when the word is invalid" do
     end
   end
 end

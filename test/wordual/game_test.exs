@@ -46,10 +46,10 @@ defmodule Wordual.GameTest do
         |> Game.join("flerpn1")
         |> Game.join("flerpn2")
 
-      {_, game} =
-        Enum.map_reduce(1..5, game, fn i, game ->
+      game =
+        Enum.reduce(1..5, game, fn _, game ->
           {:ok, game} = Game.add_char(game, "flerpn1", "a")
-          {i, game}
+          game
         end)
 
       assert {:error, :row_full} == Game.add_char(game, "flerpn1", "a")
