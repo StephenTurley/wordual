@@ -5,6 +5,7 @@ defmodule Wordual.Test.Support.Assertions do
   alias Wordual.Tile
 
   def is_initiailzied_board(result) do
+    assert result.state == :in_progress
     assert result.current_row == 0
 
     Enum.each(result.rows, fn row ->

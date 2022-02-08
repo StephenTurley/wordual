@@ -55,4 +55,7 @@ defmodule Wordual.BoardTest do
       assert {:error, :row_empty} == Board.clear_char(Board.init())
     end
   end
+
+  describe "submit_row/2" do
+  end
 end

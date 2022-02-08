@@ -47,7 +47,7 @@ defmodule Wordual.Row do
     end
   end
 
-  def analyze_row(row, word) do
+  def update_row_state(row, word) do
     Map.replace!(
       row,
       :tiles,

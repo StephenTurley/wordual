@@ -29,11 +29,11 @@ defmodule Wordual.Game do
 
       map_size(game.boards) == 1 ->
         game
-        |> Map.put(:boards, init_player(game.boards, player_id))
+        |> Map.put(:boards, init_board(game.boards, player_id))
         |> Map.put(:state, :in_progress)
 
       true ->
-        Map.put(game, :boards, init_player(game.boards, player_id))
+        Map.put(game, :boards, init_board(game.boards, player_id))
     end
   end
 
@@ -45,7 +45,7 @@ defmodule Wordual.Game do
     |> List.first()
   end
 
-  defp init_player(boards, player_id) do
+  defp init_board(boards, player_id) do
     Map.put(boards, player_id, Board.init())
   end
 

@@ -45,7 +45,7 @@ defmodule WordualWeb.GameLive do
            |> Map.get(:game)
            |> Map.get(:id)
            |> action.(player_id) do
-      Logger.info("Player #{player_id} pressed key: #{key}")
+      Logger.info("Player: #{player_id} pressed key: #{key}")
       {:noreply, assign(clear_flash(socket), :game, game)}
     else
       {:error, :row_full} ->
