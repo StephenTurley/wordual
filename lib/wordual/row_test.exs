@@ -89,9 +89,10 @@ defmodule Wordual.RowTest do
 
   describe "update_row_state/2" do
     test "should set all tiles to absent when no letters match" do
+      {:ok, row} = Row.update_row_state(row("click"), "start")
+
       result =
-        row("click")
-        |> Row.update_row_state("start")
+        row
         |> Map.get(:tiles)
         |> Enum.map(&Map.get(&1, :state))
 
@@ -99,9 +100,10 @@ defmodule Wordual.RowTest do
     end
 
     test "should set tiles that are in the word but not in the correct spot to present" do
+      {:ok, row} = Row.update_row_state(row("cramp"), "picks")
+
       result =
-        row("cramp")
-        |> Row.update_row_state("picks")
+        row
         |> Map.get(:tiles)
         |> Enum.map(&Map.get(&1, :state))
 
@@ -109,9 +111,10 @@ defmodule Wordual.RowTest do
     end
 
     test "should set tiles that are in the correct spot to correct" do
+      {:ok, row} = Row.update_row_state(row("flame"), "blame")
+
       result =
-        row("flame")
-        |> Row.update_row_state("blame")
+        row
         |> Map.get(:tiles)
         |> Enum.map(&Map.get(&1, :state))
 

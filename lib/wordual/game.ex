@@ -37,7 +37,10 @@ defmodule Wordual.Game do
     end
   end
 
-  def submit_row(game, _player_id), do: {:ok, game}
+  # TODO test me
+  def submit_row(game, player_id) do
+    update_board(game, player_id, &Board.submit_row(&1, game.word))
+  end
 
   def other_player(game, player_id) do
     Map.keys(game.boards)

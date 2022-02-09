@@ -21,4 +21,10 @@ defmodule Wordual.Test.Support.Assertions do
              }
     end)
   end
+
+  def is_correct_row(row) do
+    Enum.each(row.tiles, fn tile ->
+      assert :correct == tile.state
+    end)
+  end
 end

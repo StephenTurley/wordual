@@ -14,7 +14,7 @@ defmodule WordualWeb.Live.BoardComponent do
     <%= for row <- @board.rows do %>
       <div class="row grid grid-cols-5">
       <%= for tile <- row.tiles do %>
-        <div class="tile border p-2 m-1">
+        <div class={tile_class(tile)}>
           <%= tile.char %>
         </div>
       <% end %>
@@ -22,5 +22,9 @@ defmodule WordualWeb.Live.BoardComponent do
     <% end %>
     </div>
     """
+  end
+
+  def tile_class(tile) do
+    "#{Atom.to_string(tile.state)} tile border p-2 m-1"
   end
 end

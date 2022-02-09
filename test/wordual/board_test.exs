@@ -57,5 +57,31 @@ defmodule Wordual.BoardTest do
   end
 
   describe "submit_row/2" do
+    test "it should set the state to correct when the row is correct" do
+      {:ok, %{state: :correct, rows: rows}} = Board.submit_row(board("swole"), "swole")
+
+      rows
+      |> List.first()
+      |> is_correct_row()
+    end
+
+    test "it should return error if the row is not a valid word" do
+      assert {:error, :invalid_word} == Board.submit_row(board("flerp"), "swole")
+    end
+
+    test "it should update row state and current_row if the word is valid but not correct" do
+      {:ok, board} = Board.submit_row(board("blame"), "swole")
+
+      assert board.state == :in_progress
+      assert board.current_row == 1
+
+      tile_states =
+        board.rows
+        |> Enum.at(0)
+        |> Map.get(:tiles)
+        |> Enum.map(&Map.get(&1, :state))
+
+      assert tile_states == [:absent, :present, :absent, :absent, :correct]
+    end
   end
 end

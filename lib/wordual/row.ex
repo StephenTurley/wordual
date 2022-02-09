@@ -48,16 +48,17 @@ defmodule Wordual.Row do
   end
 
   def update_row_state(row, word) do
-    Map.replace!(
-      row,
-      :tiles,
-      Enum.with_index(row.tiles, fn tile, index ->
-        cond do
-          String.at(word, index) == tile.char -> Tile.is_correct(tile)
-          String.contains?(word, tile.char) -> Tile.is_present(tile)
-          true -> Tile.is_absent(tile)
-        end
-      end)
-    )
+    {:ok,
+     Map.replace!(
+       row,
+       :tiles,
+       Enum.with_index(row.tiles, fn tile, index ->
+         cond do
+           String.at(word, index) == tile.char -> Tile.is_correct(tile)
+           String.contains?(word, tile.char) -> Tile.is_present(tile)
+           true -> Tile.is_absent(tile)
+         end
+       end)
+     )}
   end
 end
