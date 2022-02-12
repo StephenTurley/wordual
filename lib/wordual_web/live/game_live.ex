@@ -5,8 +5,14 @@ defmodule WordualWeb.GameLive do
   @impl true
   def mount(%{"game_id" => game_id}, %{"player_id" => player_id}, socket) do
     if connected?(socket) do
-      {:ok, game} = Wordual.join_game(game_id, player_id)
-      {:ok, assigns(socket, game, player_id)}
+      case Wordual.join_game(game_id, player_id) do
+        {:ok, game} ->
+          {:ok, assigns(socket, game, player_id)}
+
+        _ ->
+          {:ok, game} = Wordual.start_game(player_id)
+          {:ok, assigns(socket, game, player_id)}
+      end
     else
       {:ok, assign(socket, :game, nil)}
     end
