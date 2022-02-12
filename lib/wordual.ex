@@ -15,6 +15,11 @@ defmodule Wordual do
     GameServer.join(pid, player_id)
   end
 
+  def restart_game(game_id, player_id) do
+    {:ok, pid} = GameServer.lookup(game_id)
+    GameServer.restart(pid, player_id)
+  end
+
   def join_game(game_id, player_id) do
     {:ok, pid} = GameServer.lookup(game_id)
     GameServer.subscribe(game_id)

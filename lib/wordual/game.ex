@@ -11,11 +11,15 @@ defmodule Wordual.Game do
     update_board(game, player_id, &Board.add_char(&1, char))
   end
 
+  def add_char(%{state: :complete}, _player_id, _char), do: {:error, :game_complete}
+
   def add_char(_game, _player_id, _char), do: {:error, :not_started}
 
   def clear_char(%{state: :in_progress} = game, player_id) do
     update_board(game, player_id, &Board.clear_char/1)
   end
+
+  def clear_char(%{state: :complete}, _player_id), do: {:error, :game_complete}
 
   def clear_char(_game, _player_id), do: {:error, :not_started}
 
@@ -38,6 +42,8 @@ defmodule Wordual.Game do
   end
 
   # TODO test me
+  def submit_row(%{state: :complete}, _player_id), do: {:error, :game_complete}
+
   def submit_row(game, player_id) do
     update_board(game, player_id, &Board.submit_row(&1, game.word))
   end
@@ -56,11 +62,24 @@ defmodule Wordual.Game do
     game.boards[player_id]
     |> updater.()
     |> case do
+      {:ok, %{state: :in_progress} = board} ->
+        {:ok, replace_board(game, player_id, board)}
+
+      # correct or failed == game over
       {:ok, board} ->
-        {:ok, Map.replace!(game, :boards, Map.replace!(game.boards, player_id, board))}
+        game =
+          game
+          |> replace_board(player_id, board)
+          |> Map.put(:state, :complete)
+
+        {:ok, game}
 
       err ->
         err
     end
+  end
+
+  defp replace_board(game, player_id, board) do
+    Map.replace!(game, :boards, Map.replace!(game.boards, player_id, board))
   end
 end

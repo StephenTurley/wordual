@@ -37,6 +37,17 @@ defmodule WordualWeb.GameLive do
   end
 
   @impl true
+  def handle_event("new_game", _, socket) do
+    player_id = socket.assigns.this_player
+
+    game =
+      socket.assigns.game.id
+      |> Wordual.restart_game(player_id)
+
+    {:noreply, assign(socket, :game, game)}
+  end
+
+  @impl true
   def handle_event("key_down", %{"key" => key}, socket) do
     with {:ok, action} <- action(key),
          player_id <- socket.assigns.this_player,
@@ -49,11 +60,19 @@ defmodule WordualWeb.GameLive do
       {:noreply, assign(clear_flash(socket), :game, game)}
     else
       {:error, :row_full} ->
-        socket = put_flash(socket, :error, "The row is full")
+        socket = put_flash(socket, :info, "The row is full")
         {:noreply, socket}
 
       {:error, :not_started} ->
         socket = put_flash(socket, :error, "Waiting for the other player")
+        {:noreply, socket}
+
+      {:error, :game_complete} ->
+        socket = put_flash(socket, :info, "Game over")
+        {:noreply, socket}
+
+      {:error, :invalid_word} ->
+        socket = put_flash(socket, :info, "Not a known word")
         {:noreply, socket}
 
       _ ->

@@ -2,11 +2,13 @@ defmodule Wordual.Board do
   defstruct [:state, :rows, :current_row]
   alias Wordual.Row
 
+  @max_row_index 5
+
   def init() do
     %__MODULE__{
       state: :in_progress,
       current_row: 0,
-      rows: Enum.map(0..5, fn _ -> Row.init() end)
+      rows: Enum.map(0..@max_row_index, fn _ -> Row.init() end)
     }
   end
 
@@ -18,7 +20,6 @@ defmodule Wordual.Board do
     update_row(board, &Row.clear_char/1)
   end
 
-  # TODO board should go to :out_of_rows state if they run out of rows
   def submit_row(%{current_row: current_row, rows: rows} = board, word) do
     rows
     |> Enum.at(current_row)
@@ -54,6 +55,11 @@ defmodule Wordual.Board do
       err ->
         err
     end
+  end
+
+  # out of rows
+  defp increment_row({:ok, %{current_row: @max_row_index} = board}) do
+    {:ok, Map.put(board, :state, :failed)}
   end
 
   defp increment_row({:ok, board}) do
