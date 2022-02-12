@@ -58,7 +58,7 @@ defmodule Wordual.BoardTest do
 
   describe "submit_row/2" do
     test "it should set the state to correct when the row is correct" do
-      {:ok, %{state: :correct, rows: rows}} = Board.submit_row(board("swole"), "swole")
+      {:ok, %{state: :correct, rows: rows}} = Board.submit_row(board_with_word("swole"), "swole")
 
       rows
       |> List.first()
@@ -66,11 +66,11 @@ defmodule Wordual.BoardTest do
     end
 
     test "it should return error if the row is not a valid word" do
-      assert {:error, :invalid_word} == Board.submit_row(board("flerp"), "swole")
+      assert {:error, :invalid_word} == Board.submit_row(board_with_word("flerp"), "swole")
     end
 
     test "it should update row state and current_row if the word is valid but not correct" do
-      {:ok, board} = Board.submit_row(board("blame"), "swole")
+      {:ok, board} = Board.submit_row(board_with_word("blame"), "swole")
 
       assert board.state == :in_progress
       assert board.current_row == 1
@@ -83,5 +83,9 @@ defmodule Wordual.BoardTest do
 
       assert tile_states == [:absent, :present, :absent, :absent, :correct]
     end
+  end
+
+  @tag :skip
+  test "it should update the board state to failed if the last guess is wrong" do
   end
 end

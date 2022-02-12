@@ -11,10 +11,25 @@ defmodule Wordual.Test.Support.Factories do
     end)
   end
 
-  def board(word) do
+  def board_with_words(board \\ Board.init(), words) when is_list(words) do
+    {_, board} =
+      Enum.map_reduce(words, board, fn word, board ->
+        {:ok, board} =
+          board
+          |> board_with_word(word)
+          # using abcde as the target word so i dont't match it on accident
+          |> Board.submit_row("abcde")
+
+        {word, board}
+      end)
+
+    board
+  end
+
+  def board_with_word(board \\ Board.init(), word) when is_binary(word) do
     word
     |> String.split("", trim: true)
-    |> Enum.reduce(Board.init(), fn char, board ->
+    |> Enum.reduce(board, fn char, board ->
       {:ok, board} = Board.add_char(board, char)
       board
     end)
