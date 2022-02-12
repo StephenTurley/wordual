@@ -16,33 +16,42 @@ defmodule Wordual do
   end
 
   def restart_game(game_id, player_id) do
-    {:ok, pid} = GameServer.lookup(game_id)
-    GameServer.restart(pid, player_id)
+    do_action(game_id, &GameServer.restart(&1, player_id))
   end
 
   def join_game(game_id, player_id) do
-    {:ok, pid} = GameServer.lookup(game_id)
-    GameServer.subscribe(game_id)
-    GameServer.join(pid, player_id)
+    do_action(game_id, fn pid ->
+      GameServer.subscribe(game_id)
+      GameServer.join(pid, player_id)
+    end)
   end
 
   def get_game(game_id) do
-    {:ok, pid} = GameServer.lookup(game_id)
-    GameServer.get(pid)
+    do_action(game_id, &GameServer.get/1)
   end
 
   def add_char(game_id, player_id, char) do
-    {:ok, pid} = GameServer.lookup(game_id)
-    GameServer.add_char(pid, player_id, char)
+    do_action(game_id, fn pid ->
+      GameServer.add_char(pid, player_id, char)
+    end)
   end
 
   def clear_char(game_id, player_id) do
-    {:ok, pid} = GameServer.lookup(game_id)
-    GameServer.clear_char(pid, player_id)
+    do_action(game_id, fn pid ->
+      GameServer.clear_char(pid, player_id)
+    end)
   end
 
   def submit_row(game_id, player_id) do
-    {:ok, pid} = GameServer.lookup(game_id)
-    GameServer.submit_row(pid, player_id)
+    do_action(game_id, fn pid ->
+      GameServer.submit_row(pid, player_id)
+    end)
+  end
+
+  defp do_action(game_id, action) do
+    case GameServer.lookup(game_id) do
+      {:ok, pid} -> action.(pid)
+      err -> err
+    end
   end
 end
