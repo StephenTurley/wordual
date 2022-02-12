@@ -9,11 +9,7 @@ defmodule Wordual.GameServer do
 
   @impl true
   def init(opts) do
-    {:ok,
-     %Game{
-       id: Keyword.fetch!(opts, :game_id),
-       word: Words.random_word()
-     }}
+    {:ok, Game.init(Keyword.fetch!(opts, :game_id), Words.random_word())}
   end
 
   def start(game_id) do
@@ -66,16 +62,14 @@ defmodule Wordual.GameServer do
   end
 
   # Callbacks
-  #
 
   @impl true
   def handle_call({:restart, player_id}, _from, game) do
     other_player = Game.other_player(game, player_id)
 
-    {:ok, game} = init(game_id: game.id)
-
     game =
-      Game.join(game, player_id)
+      Game.init(game.id, Words.random_word())
+      |> Game.join(player_id)
       |> Game.join(other_player)
 
     Phoenix.PubSub.broadcast!(@pubsub, game.id, {:game_updated, player_id, game.id})

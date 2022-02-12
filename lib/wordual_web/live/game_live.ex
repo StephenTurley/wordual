@@ -40,7 +40,7 @@ defmodule WordualWeb.GameLive do
   def handle_event("new_game", _, socket) do
     player_id = socket.assigns.this_player
 
-    game =
+    {:ok, game} =
       socket.assigns.game.id
       |> Wordual.restart_game(player_id)
 
