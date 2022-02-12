@@ -25,6 +25,6 @@ defmodule WordualWeb.Live.BoardComponent do
   end
 
   def tile_class(tile) do
-    "#{Atom.to_string(tile.state)} tile border p-2 m-1"
+    "#{Atom.to_string(tile.state)} tile text-center text-2xl border p-2 m-1"
   end
 end
