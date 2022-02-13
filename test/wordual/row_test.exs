@@ -142,5 +142,16 @@ defmodule Wordual.RowTest do
 
       assert result == [:absent, :absent, :present, :absent, :absent]
     end
+
+    test "it should find the letter twice if its in the word twice" do
+      {:ok, row} = Row.update_row_state(row("alley"), "shell")
+
+      result =
+        row
+        |> Map.get(:tiles)
+        |> Enum.map(&Map.get(&1, :state))
+
+      assert result == [:absent, :present, :present, :present, :absent]
+    end
   end
 end
