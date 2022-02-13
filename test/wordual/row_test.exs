@@ -131,5 +131,16 @@ defmodule Wordual.RowTest do
 
       assert result == [:absent, :present, :correct, :absent, :absent]
     end
+
+    test "should not detect characters twice even if they are in the wrong spot" do
+      {:ok, row} = Row.update_row_state(row("hello"), "livid")
+
+      result =
+        row
+        |> Map.get(:tiles)
+        |> Enum.map(&Map.get(&1, :state))
+
+      assert result == [:absent, :absent, :present, :absent, :absent]
+    end
   end
 end

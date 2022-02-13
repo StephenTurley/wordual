@@ -52,20 +52,18 @@ defmodule Wordual.Row do
   end
 
   defp update_tiles(tiles, word) do
-    letters = String.split(word, "", trim: true)
-
     {tiles, _} =
       Enum.with_index(tiles)
-      |> Enum.map_reduce(letters, fn {tile, index}, letters ->
+      |> Enum.map_reduce([], fn {tile, index}, found ->
         cond do
-          Enum.at(letters, index) == tile.char ->
-            {Tile.is_correct(tile), List.replace_at(letters, index, " ")}
+          String.at(word, index) == tile.char ->
+            {Tile.is_correct(tile), [tile.char | found]}
 
-          Enum.any?(letters, fn letter -> letter == tile.char end) ->
-            {Tile.is_present(tile), letters}
+          String.contains?(word, tile.char) && !Enum.any?(found, fn char -> char == tile.char end) ->
+            {Tile.is_present(tile), [tile.char | found]}
 
           true ->
-            {Tile.is_absent(tile), letters}
+            {Tile.is_absent(tile), found}
         end
       end)
 
