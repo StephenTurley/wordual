@@ -153,5 +153,16 @@ defmodule Wordual.RowTest do
 
       assert result == [:absent, :present, :present, :present, :absent]
     end
+
+    test "it should not set a tile as present if its found correctly later" do
+      {:ok, row} = Row.update_row_state(row("feces"), "bakes")
+
+      result =
+        row
+        |> Map.get(:tiles)
+        |> Enum.map(&Map.get(&1, :state))
+
+      assert result == [:absent, :absent, :absent, :correct, :correct]
+    end
   end
 end
