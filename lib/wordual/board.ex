@@ -2,7 +2,7 @@ defmodule Wordual.Board do
   defstruct [:state, :rows, :current_row]
   alias Wordual.Row
 
-  @max_row_index 5
+  @max_row_index 3
 
   def init() do
     %__MODULE__{

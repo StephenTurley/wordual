@@ -87,7 +87,7 @@ defmodule Wordual.BoardTest do
 
   test "it should update the board state to failed if the last guess is wrong" do
     {:ok, result} =
-      board_with_words(["ultra", "flame", "blame", "swole", "close"])
+      board_with_words(["ultra", "flame", "blame"])
       |> board_with_word("brave")
       |> Board.submit_row("hello")
 
