@@ -12,15 +12,12 @@
         <p class="text-xs">Invite link:</p>
         <p class="text-xs"><%= Routes.game_url(@socket, :index, @game.id) %></p>
       <% else %>
-        <p class="text-xs"><%= other_player(@game, @this_player) %></p>
         <WordualWeb.Live.BoardComponent.show id={other_player(@game, @this_player)} game={@game} />
       <% end %>
     </div>
     <div id="this_player" class="p-2">
-      <p class="text-xs"><%= @this_player %></p>
       <WordualWeb.Live.BoardComponent.show id={@this_player} game={@game} />
     </div>
-
   </div>
 <% end %>
 
