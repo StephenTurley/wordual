@@ -6,7 +6,7 @@
       <div><button phx-click="new_game" class="border py-2 px-3 bg-cyan-100 shadow-md">Play Again</button></div>
     </div>
   <% end %>  
-  <div class="container mx-auto max-w-xs" phx-window-keydown="key_down">
+  <div class="game" phx-window-keydown="key_down">
     <div id="other_player" class="p-2">
       <%= if other_player(@game, @this_player) == nil do %>
         <p class="text-xs">Invite link:</p>
@@ -18,7 +18,8 @@
     <div id="this_player" class="p-2">
       <WordualWeb.Live.BoardComponent.show id={@this_player} game={@game} />
     </div>
-
-    <WordualWeb.Live.KeyboardComponent.show />
+    <div class="w-full mx-auto">
+      <WordualWeb.Live.KeyboardComponent.show />
+    </div>
   </div>
 <% end %>

@@ -18,20 +18,30 @@ defmodule WordualWeb.Live.KeyboardComponent do
       <% end %>
       </div>
       <div class="row">
-      <%= for key <- @row_two do %>
-        <button phx-click="key_down" phx-value-key={key}>
-          <%= key %>
-        </button>
-      <% end %>
+        <div class="half"></div>
+        <%= for key <- @row_two do %>
+          <button phx-click="key_down" phx-value-key={key}>
+            <%= key %>
+          </button>
+        <% end %>
+        <div class="half"></div>
       </div>
       <div class="row">
       <%= for key <- @row_three do %>
-        <button phx-click="key_down" phx-value-key={key}>
+        <button class={class(key)} phx-click="key_down" phx-value-key={key}>
           <%= key %>
         </button>
       <% end %>
       </div>
     </div>
     """
+  end
+
+  defp class(key) do
+    case key do
+      "Enter" -> "one-and-a-half"
+      "Backspace" -> "one-and-a-half"
+      _ -> ""
+    end
   end
 end

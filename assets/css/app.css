@@ -2,6 +2,62 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+.game {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  max-height: calc(100% - 50px);
+  display: flex;
+  flex-direction: column;
+}
+
+.keyboard {
+  width: 500px;
+  height: 200px;
+  margin: 0 8px;
+  user-select: none;
+}
+
+.keyboard .row {
+  display: flex;
+  width: 100%;
+  margin: 0 auto 8px;
+  touch-action: manipulation;
+}
+
+.keyboard button {
+  font-family: inherit;
+  font-weight: bold;
+  border: 0;
+  padding: 0;
+  margin: 0 6px 0 0;
+  height: 58px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background-color: #d3d6da;
+  color: var(--key-text-color);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.3);
+}
+
+.keyboard button:focus {
+  outline: none;
+}
+
+.keyboard button.last-of-type {
+  margin: 0;
+}
+
+.keyboard .half { flex: 0.5; }
+.keyboard .one { flex: 1; }
+.keyboard .one-and-a-half { flex: 1.5; }
+.keyboard .two { flex: 2; }
+
 .tile {
   color: black;
   text-transform: uppercase;
