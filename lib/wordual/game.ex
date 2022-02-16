@@ -41,7 +41,6 @@ defmodule Wordual.Game do
     end
   end
 
-  # TODO test me
   def submit_row(%{state: :complete}, _player_id), do: {:error, :game_complete}
 
   def submit_row(game, player_id) do
