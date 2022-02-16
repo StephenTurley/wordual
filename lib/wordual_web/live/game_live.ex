@@ -83,7 +83,7 @@ defmodule WordualWeb.GameLive do
   end
 
   def valid_char?(key) do
-    String.length(key) == 1 && String.match?(key, ~r/[a-z]/)
+    String.length(key) == 1 && String.match?(key, ~r/[a-zA-Z]/)
   end
 
   defp action(key) do

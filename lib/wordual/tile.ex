@@ -6,7 +6,7 @@ defmodule Wordual.Tile do
   end
 
   def for_char(char) do
-    %__MODULE__{state: :filled, char: char}
+    %__MODULE__{state: :filled, char: String.downcase(char)}
   end
 
   def is_present(tile) do
