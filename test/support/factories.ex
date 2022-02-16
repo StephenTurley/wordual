@@ -1,6 +1,6 @@
 defmodule Wordual.Test.Support.Factories do
-  alias Wordual.Row
   alias Wordual.Board
+  alias Wordual.Row
 
   def row(word) do
     word

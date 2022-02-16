@@ -5,7 +5,7 @@ defmodule Wordual.Row do
   alias Wordual.Tile
   alias Wordual.Words
 
-  def init() do
+  def init do
     %__MODULE__{
       current_tile: 0,
       tiles: Enum.map(1..@max_tiles, fn _ -> Tile.init() end)
@@ -56,14 +56,13 @@ defmodule Wordual.Row do
 
     # find all correct
     {tiles, found} =
-      Enum.with_index(tiles)
+      tiles
+      |> Enum.with_index()
       |> Enum.map_reduce([], fn {tile, index}, found ->
-        cond do
-          Enum.at(word, index) == tile.char ->
-            {Tile.is_correct(tile), [tile.char | found]}
-
-          true ->
-            {tile, found}
+        if Enum.at(word, index) == tile.char do
+          {Tile.is_correct(tile), [tile.char | found]}
+        else
+          {tile, found}
         end
       end)
 

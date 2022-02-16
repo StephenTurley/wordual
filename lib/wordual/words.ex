@@ -1,7 +1,5 @@
 defmodule Wordual.Words do
-  @config Application.get_env(:wordual, __MODULE__)
-
-  def random_word() do
+  def random_word do
     game_words()
     |> Enum.random()
   end
@@ -10,11 +8,15 @@ defmodule Wordual.Words do
     Enum.any?(all_words(), &(&1 == word))
   end
 
-  defp game_words() do
-    Keyword.get(@config, :game_words)
+  defp game_words do
+    Keyword.get(config(), :game_words)
   end
 
-  defp all_words() do
-    Keyword.get(@config, :choice_words) ++ game_words()
+  defp all_words do
+    Keyword.get(config(), :choice_words) ++ game_words()
+  end
+
+  defp config do
+    Application.fetch_env!(:wordual, __MODULE__)
   end
 end

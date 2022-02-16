@@ -4,7 +4,7 @@ defmodule Wordual.Board do
 
   @max_row_index 3
 
-  def init() do
+  def init do
     %__MODULE__{
       state: :in_progress,
       current_row: 0,

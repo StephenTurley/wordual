@@ -49,6 +49,7 @@ defmodule Wordual.MixProject do
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:plug_cowboy, "~> 2.5"}
     ]
   end
