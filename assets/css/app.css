@@ -5,6 +5,24 @@
 .tile {
   color: black;
   text-transform: uppercase;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: bold;
+  vertical-align: middle;
+  box-sizing: border-box;
+  color: var(--tile-text-color);
+  text-transform: uppercase;
+  user-select: none;
+  border: 2px solid #d3d6da;
+}
+.tile::before {
+  content: '';
+  display: inline-block;
+  padding-bottom: 100%;
 }
 
 .absent {

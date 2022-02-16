@@ -1,4 +1,4 @@
-<main>
+<main class="font-mono">
   <p class="alert alert-info" role="alert"
     phx-click="lv:clear-flash"
     phx-value-key="info"><%= live_flash(@flash, :info) %></p>
@@ -7,8 +7,8 @@
     phx-click="lv:clear-flash"
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 
-  <div class="w-full px-1 py-2">
-    <h1>Worduel</h1>
+  <div class="w-full px-1 py-2 text-center">
+    <h1 class="text-3xl font-extrabold">Worduel</h1>
   </div>
 
   <%= @inner_content %>
