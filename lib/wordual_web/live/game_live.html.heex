@@ -6,18 +6,18 @@
       <div><button phx-click="new_game" class="border py-2 px-3 bg-cyan-100 shadow-md">Play Again</button></div>
     </div>
   <% end %>  
-  <div class="container mx-auto max-w-md h-screen" phx-window-keydown="key_down">
+  <div class="container mx-auto max-w-xs" phx-window-keydown="key_down">
     <div id="other_player" class="p-2">
       <%= if other_player(@game, @this_player) == nil do %>
-        <p>Invite link:</p>
+        <p class="text-xs">Invite link:</p>
         <p class="text-xs"><%= Routes.game_url(@socket, :index, @game.id) %></p>
       <% else %>
-        <p><%= other_player(@game, @this_player) %></p>
+        <p class="text-xs"><%= other_player(@game, @this_player) %></p>
         <WordualWeb.Live.BoardComponent.show id={other_player(@game, @this_player)} game={@game} />
       <% end %>
     </div>
     <div id="this_player" class="p-2">
-      <p><%= @this_player %></p>
+      <p class="text-xs"><%= @this_player %></p>
       <WordualWeb.Live.BoardComponent.show id={@this_player} game={@game} />
     </div>
 
