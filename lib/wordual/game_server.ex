@@ -85,6 +85,7 @@ defmodule Wordual.GameServer do
 
   @impl true
   def handle_call({:join, _player_id}, _from, game) do
+    # TODO allow player to rejoin same game
     {:reply, {:error, :game_full}, game}
   end
 
