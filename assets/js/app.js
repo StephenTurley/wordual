@@ -24,7 +24,6 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-import ClipboardJS from "clipboard"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
@@ -34,14 +33,21 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
-window.addEventListener('phx:page-loading-stop', function() {
-  var clipboard = new ClipboardJS("#invite-button")
-
-  clipboard.on('success', function(e) {
-    console.info('Action:', e.action);
-    console.info('Text:', e.text);
+window.addEventListener("clipcopy", (event) => {
+  const text = event.target.textContent;
+  share = {
+    title: "Wordual Invite",
+    text: text
+  }
+  if (navigator.canSahre && navigator.canShare(share)) {
+    navigator.share(share);
+  }
+  else if ("clipboard" in navigator) {
+    navigator.clipboard.writeText(text);
     alert("Invite link copied to clipboard, share with friend to invite to your game!");
-  });
+  } else {
+    alert("Sorry, your browser does not support clipboard copy.");
+  }
 });
 
 // connect if there are any LiveViews on the page

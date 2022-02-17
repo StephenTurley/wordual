@@ -10,8 +10,10 @@
     <div id="other_player" class="p-2">
       <%= if other_player(@game, @this_player) == nil do %>
         <div class="flex center-content justify-center">
-          <button id="invite-button" data-clipboard-text={Routes.game_url(@socket, :index, @game.id)} class="border py-2 px-3 bg-cyan-100 shadow-md">Invite</button>
+          <button class="border py-2 px-3 bg-cyan-100 shadow-md"
+                  phx-click={Phoenix.LiveView.JS.dispatch("clipcopy", to: "#game-url")}>Invite</button>
         </div>
+        <p id="game-url" class="hidden"><%= Routes.game_url(@socket, :index, @game.id) %></p>
       <% else %>
         <WordualWeb.Live.BoardComponent.show id={other_player(@game, @this_player)} game={@game} />
       <% end %>
