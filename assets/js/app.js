@@ -37,7 +37,7 @@ window.addEventListener("clipcopy", (event) => {
   if ("clipboard" in navigator) {
     const text = event.target.textContent;
     navigator.clipboard.writeText(text);
-    alert("Invite link copied to clipboard");
+    alert("Invite link copied to clipboard, share with friend to invite to your game!");
   } else {
     alert("Sorry, your browser does not support clipboard copy.");
   }
