@@ -1,5 +1,8 @@
 {
-  "scripts" : {
-    "deploy" : "cd .. && mix assets.deploy && rm -f _build/esbuild"
+  "scripts": {
+    "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild"
+  },
+  "dependencies": {
+    "clipboard": "^2.0.10"
   }
 }
