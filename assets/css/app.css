@@ -4,11 +4,23 @@
 
 .game {
   width: 100%;
-  max-width: 500px;
+  max-width: 250px;
   margin: 0 auto;
   max-height: calc(100% - 50px);
   display: flex;
   flex-direction: column;
+}
+
+@media screen(sm) {
+  .game {
+    max-width: 350px;
+  }
+}
+
+@media screen(md) {
+  .game {
+    max-width: 500px;
+  }
 }
 
 .keyboard {
