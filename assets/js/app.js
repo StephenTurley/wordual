@@ -39,7 +39,7 @@ window.addEventListener("clipcopy", (event) => {
     title: "Wordual Invite",
     text: text
   }
-  if (navigator.canSahre && navigator.canShare(share)) {
+  if (navigator.canShare) {
     navigator.share(share);
   }
   else if ("clipboard" in navigator) {
