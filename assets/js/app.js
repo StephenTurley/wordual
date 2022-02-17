@@ -34,16 +34,17 @@ window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
 window.addEventListener("clipcopy", (event) => {
-  const text = event.target.textContent;
+  const url = event.target.textContent;
   share = {
     title: "Wordual Invite",
-    text: text
+    text: "Click to join my Worduel Game!",
+    url: url
   }
   if (navigator.canShare) {
     navigator.share(share);
   }
   else if ("clipboard" in navigator) {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(url);
     alert("Invite link copied to clipboard, share with friend to invite to your game!");
   } else {
     alert("Sorry, your browser does not support clipboard copy.");
