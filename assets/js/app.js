@@ -35,8 +35,11 @@ window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
 window.addEventListener("clipcopy", (event) => {
   if ("clipboard" in navigator) {
-    const text = event.target.textContent;
-    navigator.clipboard.writeText(text);
+    const url = event.target;
+    url.select();
+    url.setSelectionRange(0, 99999);
+
+    navigator.clipboard.writeText(url.value);
     alert("Invite link copied to clipboard, share with friend to invite to your game!");
   } else {
     alert("Sorry, your browser does not support clipboard copy.");
