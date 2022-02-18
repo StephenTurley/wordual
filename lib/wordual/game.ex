@@ -1,10 +1,16 @@
 defmodule Wordual.Game do
-  defstruct [:id, :state, :word, boards: %{}]
+  defstruct [:id, :state, :word, :keyboard_hints, boards: %{}]
 
   alias Wordual.Board
+  alias Wordual.KeyboardHints
 
   def init(id, word) do
-    %__MODULE__{id: id, word: word, state: :starting}
+    %__MODULE__{
+      id: id,
+      word: word,
+      state: :starting,
+      keyboard_hints: KeyboardHints.init()
+    }
   end
 
   def add_char(%{state: :in_progress} = game, player_id, char) do
@@ -44,7 +50,18 @@ defmodule Wordual.Game do
   def submit_row(%{state: :complete}, _player_id), do: {:error, :game_complete}
 
   def submit_row(game, player_id) do
-    update_board(game, player_id, &Board.submit_row(&1, game.word))
+    case update_board(game, player_id, &Board.submit_row(&1, game.word)) do
+      {:ok, game} ->
+        hints =
+          game.boards
+          |> Map.get(player_id)
+          |> Board.update_hints(game.keyboard_hints)
+
+        {:ok, Map.put(game, :keyboard_hints, hints)}
+
+      err ->
+        err
+    end
   end
 
   def other_player(game, player_id) do

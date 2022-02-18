@@ -56,6 +56,20 @@
   text-transform: uppercase;
   -webkit-tap-highlight-color: rgba(0,0,0,0.3);
 }
+.keyboard .absent {
+  color: white;
+  background-color: #787c7e;
+}
+
+.keyboard .present {
+  color: white;
+  background-color: #c9b458;
+}
+
+.keyboard .correct {
+  color: white;
+  background-color: #6aaa64;
+}
 
 .keyboard button:focus {
   outline: none;

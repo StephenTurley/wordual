@@ -1,5 +1,6 @@
 defmodule Wordual.Board do
   defstruct [:state, :rows, :current_row]
+  alias Wordual.KeyboardHints
   alias Wordual.Row
 
   @max_row_index 3
@@ -38,6 +39,18 @@ defmodule Wordual.Board do
       err ->
         err
     end
+  end
+
+  def update_hints(board, hints) do
+    {_, hints} =
+      board.rows
+      |> Enum.at(board.current_row - 1)
+      |> Map.get(:tiles)
+      |> Enum.map_reduce(hints, fn tile, hints ->
+        {tile, KeyboardHints.update(hints, tile)}
+      end)
+
+    hints
   end
 
   defp update_row(%{rows: rows, current_row: current_row} = board, updater) do

@@ -19,4 +19,5 @@ defmodule Wordual.KeyboardHints do
   defp maybe_update(:correct, _), do: :correct
   defp maybe_update(:present, %{state: :correct}), do: :correct
   defp maybe_update(:present, _), do: :present
+  defp maybe_update(_, tile), do: tile.state
 end

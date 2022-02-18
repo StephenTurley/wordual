@@ -4,6 +4,7 @@ defmodule Wordual.GameTest do
   import Wordual.Test.Support.Assertions
 
   alias Wordual.Game
+  alias Wordual.KeyboardHints
   alias Wordual.Row
 
   describe "init/2" do
@@ -12,6 +13,7 @@ defmodule Wordual.GameTest do
       assert result.id == "abc123"
       assert result.word == "swole"
       assert result.state == :starting
+      assert result.keyboard_hints == %KeyboardHints{}
       assert result.boards == %{}
     end
   end
