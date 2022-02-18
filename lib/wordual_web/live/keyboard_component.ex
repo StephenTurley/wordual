@@ -39,8 +39,8 @@ defmodule WordualWeb.Live.KeyboardComponent do
 
   defp class(key) do
     case key do
-      "Enter" -> "one-and-a-half"
-      "Backspace" -> "one-and-a-half"
+      "Enter" -> "one-and-a-half text-xs"
+      "Backspace" -> "one-and-a-half text-xs"
       _ -> ""
     end
   end
