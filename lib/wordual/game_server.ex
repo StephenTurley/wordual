@@ -1,11 +1,13 @@
 defmodule Wordual.GameServer do
   use GenServer
-  @registry Wordual.GameRegistry
-  @supervisor Wordual.GameSupervisor
-  @pubsub Wordual.PubSub
+  require Logger
 
   alias Wordual.Game
   alias Wordual.Words
+
+  @registry Wordual.GameRegistry
+  @supervisor Wordual.GameSupervisor
+  @pubsub Wordual.PubSub
 
   @impl true
   def init(opts) do
@@ -30,7 +32,9 @@ defmodule Wordual.GameServer do
 
   def start_link(opts) do
     {name, opts} = Keyword.pop(opts, :name)
-    GenServer.start_link(__MODULE__, opts, name: name)
+    {:ok, pid} = GenServer.start_link(__MODULE__, opts, name: name)
+    Process.send_after(pid, :tick, 1000)
+    {:ok, pid}
   end
 
   def join(pid, player_id) do
@@ -62,6 +66,20 @@ defmodule Wordual.GameServer do
   end
 
   # Callbacks
+
+  @impl true
+  def handle_info(:tick, game) do
+    game = Game.tick(game, 1000)
+
+    if game.ttl <= 0 do
+      Logger.info("Game: #{game.id} timed out")
+      DynamicSupervisor.terminate_child(@supervisor, self())
+      {:stop, :shutdown, game}
+    else
+      Process.send_after(self(), :tick, 1000)
+      {:noreply, game}
+    end
+  end
 
   @impl true
   def handle_call({:restart, player_id}, _from, game) do

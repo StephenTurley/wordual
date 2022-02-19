@@ -1,12 +1,16 @@
 defmodule Wordual.Game do
-  defstruct [:id, :state, :word, :keyboard_hints, boards: %{}]
+  defstruct [:id, :ttl, :state, :word, :keyboard_hints, boards: %{}]
 
   alias Wordual.Board
   alias Wordual.KeyboardHints
 
+  # Time to live before GameServer kills itself
+  @ttl 1000 * 60 * 20
+
   def init(id, word) do
     %__MODULE__{
       id: id,
+      ttl: @ttl,
       word: word,
       state: :starting,
       keyboard_hints: KeyboardHints.init()
@@ -70,11 +74,17 @@ defmodule Wordual.Game do
     |> List.first()
   end
 
+  def tick(game, time) do
+    Map.update!(game, :ttl, fn ttl -> ttl - time end)
+  end
+
   defp init_board(boards, player_id) do
     Map.put(boards, player_id, Board.init())
   end
 
   defp update_board(game, player_id, updater) do
+    game = Map.put(game, :ttl, @ttl)
+
     game.boards[player_id]
     |> updater.()
     |> case do

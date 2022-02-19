@@ -77,6 +77,10 @@ defmodule WordualWeb.GameLive do
         socket = put_flash(socket, :info, "Not a known word")
         {:noreply, socket}
 
+      {:error, :not_found} ->
+        socket = put_flash(socket, :error, "Game timed out. Refresh to play again.")
+        {:noreply, socket}
+
       _ ->
         {:noreply, socket}
     end
