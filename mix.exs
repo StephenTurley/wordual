@@ -33,6 +33,7 @@ defmodule Wordual.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:distillery, "~> 2.1"},
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},

@@ -10,6 +10,10 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :wordual, WordualWeb.Endpoint,
+  server: true,
+  load_from_system_env: true,
+  secret_key_base: "${SECRET_KEY_BASE}",
+  http: [port: {:system, "PORT"}],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
