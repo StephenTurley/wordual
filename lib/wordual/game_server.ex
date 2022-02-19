@@ -83,6 +83,7 @@ defmodule Wordual.GameServer do
 
   @impl true
   def handle_call({:restart, player_id}, _from, game) do
+    Logger.info("Player #{player_id} restarted the game #{game.id}")
     other_player = Game.other_player(game, player_id)
 
     game =
@@ -96,6 +97,8 @@ defmodule Wordual.GameServer do
 
   @impl true
   def handle_call({:join, player_id}, _from, %{state: :starting} = game) do
+    Logger.info("Player #{player_id} joined the game #{game.id}")
+
     Phoenix.PubSub.broadcast!(@pubsub, game.id, {:game_updated, player_id, game.id})
     game = Game.join(game, player_id)
     {:reply, {:ok, game}, game}
@@ -103,6 +106,8 @@ defmodule Wordual.GameServer do
 
   @impl true
   def handle_call({:join, player_id}, _from, game) do
+    Logger.info("Player #{player_id} joined a running game #{game.id}")
+
     if Map.has_key?(game.boards, player_id) do
       {:reply, {:ok, game}, game}
     else
@@ -115,16 +120,19 @@ defmodule Wordual.GameServer do
 
   @impl true
   def handle_call({:add_char, player_id, char}, _from, game) do
+    Logger.info("Player #{player_id} added a character '#{char}'")
     update_game(game, player_id, Game.add_char(game, player_id, char))
   end
 
   @impl true
   def handle_call({:clear_char, player_id}, _from, game) do
+    Logger.info("Player #{player_id} deleted a character")
     update_game(game, player_id, Game.clear_char(game, player_id))
   end
 
   @impl true
   def handle_call({:submit_row, player_id}, _from, game) do
+    Logger.info("Player #{player_id} submitted a row")
     update_game(game, player_id, Game.submit_row(game, player_id))
   end
 

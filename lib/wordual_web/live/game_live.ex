@@ -1,6 +1,5 @@
 defmodule WordualWeb.GameLive do
   use WordualWeb, :live_view
-  require Logger
 
   @impl true
   def mount(%{"game_id" => game_id}, %{"player_id" => player_id}, socket) do
@@ -36,7 +35,6 @@ defmodule WordualWeb.GameLive do
 
   @impl true
   def handle_info({:game_updated, player_id, game_id}, socket) do
-    Logger.info("Player: #{player_id} updated game: #{game_id}")
     {:ok, game} = Wordual.get_game(game_id)
 
     {:noreply, assign(socket, :game, game)}
@@ -62,7 +60,6 @@ defmodule WordualWeb.GameLive do
            |> Map.get(:game)
            |> Map.get(:id)
            |> action.(player_id) do
-      Logger.info("Player: #{player_id} pressed key: #{key}")
       {:noreply, assign(clear_flash(socket), :game, game)}
     else
       {:error, :not_started} ->
