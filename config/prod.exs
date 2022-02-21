@@ -14,7 +14,7 @@ config :wordual, WordualWeb.Endpoint,
   load_from_system_env: true,
   secret_key_base: "${SECRET_KEY_BASE}",
   http: [port: {:system, "PORT"}],
-  url: [host: "www.wordual.com", port: 443],
+  url: [host: "www.worduel.net", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
   version: Mix.Project.config()[:version]
