@@ -17,6 +17,12 @@ config :wordual, WordualWeb.Endpoint,
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :wordual, Wordual.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: "${DATABASE_URL}",
+  database: "",
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+
 # Do not print debug messages in production
 config :logger, level: :info
 
