@@ -33,7 +33,7 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
-window.addEventListener("clipcopy", (event) => {
+window.addEventListener("clipcopy", async (event) => {
   const url = event.target.textContent;
   share = {
     title: "Wordual Invite",
@@ -44,7 +44,7 @@ window.addEventListener("clipcopy", (event) => {
     navigator.share(share);
   }
   else if ("clipboard" in navigator) {
-    navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(url);
     alert("Invite link copied to clipboard, share with friend to invite to your game!");
   } else {
     alert("Sorry, your browser does not support clipboard copy.");
