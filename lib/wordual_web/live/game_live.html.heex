@@ -5,7 +5,7 @@
       <div><p>Word was: <span><%= @game.word %></span></p></div>
       <div><button phx-click="new_game" class="border py-2 px-3 bg-cyan-100 shadow-md">Play Again</button></div>
     </div>
-  <% end %>  
+  <% end %>
   <div class="game" phx-window-keydown="key_down">
     <div id="other_player" class="p-2">
       <%= if other_player(@game, @this_player) == nil do %>
