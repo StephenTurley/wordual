@@ -4,7 +4,7 @@ defmodule Wordual.Test.Support.Assertions do
   alias Wordual.Row
   alias Wordual.Tile
 
-  def is_initiailzied_board(result) do
+  def is_initialized_board(result) do
     assert result.state == :in_progress
     assert result.current_row == 0
 

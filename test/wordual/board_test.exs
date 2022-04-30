@@ -9,7 +9,7 @@ defmodule Wordual.BoardTest do
 
   describe "init/0" do
     test "should intitialize the empty board" do
-      is_initiailzied_board(Board.init())
+      is_initialized_board(Board.init())
     end
   end
 

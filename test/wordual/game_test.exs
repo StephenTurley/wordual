@@ -86,7 +86,7 @@ defmodule Wordual.GameTest do
       game
       |> Map.get(:boards)
       |> Map.get("flerpn1")
-      |> is_initiailzied_board()
+      |> is_initialized_board()
     end
   end
 
@@ -99,11 +99,11 @@ defmodule Wordual.GameTest do
 
       result.boards
       |> Map.get("flerpn1")
-      |> is_initiailzied_board()
+      |> is_initialized_board()
 
       result.boards
       |> Map.get("flerpn2")
-      |> is_initiailzied_board()
+      |> is_initialized_board()
     end
 
     test "It only allows the player to join once" do
