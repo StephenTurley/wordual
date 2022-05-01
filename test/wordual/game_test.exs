@@ -2,6 +2,7 @@ defmodule Wordual.GameTest do
   use ExUnit.Case
 
   import Wordual.Test.Support.Assertions
+  import Wordual.Test.Support.Factories
 
   alias Wordual.Game
   alias Wordual.KeyboardHints
@@ -15,6 +16,24 @@ defmodule Wordual.GameTest do
       assert result.state == :starting
       assert result.keyboard_hints == %KeyboardHints{}
       assert result.boards == %{}
+    end
+  end
+
+  describe "completing a game" do
+    setup do
+      {:ok, game: Game.init("abc123", "swole") |> Game.join("p1") |> Game.join("p2")}
+    end
+
+    test "it should have a :complete status", state do
+      game = submit_player_row(state.game, "p1", "swole")
+
+      assert game.state == :complete
+    end
+
+    test "it knows if we have won", state do
+      game = submit_player_row(state.game, "p1", "swole")
+
+      assert game.statistics == %{"p1" => %{wins: 1, losses: 0}, "p2" => %{wins: 0, losses: 1}}
     end
   end
 
@@ -86,7 +105,7 @@ defmodule Wordual.GameTest do
       game
       |> Map.get(:boards)
       |> Map.get("flerpn1")
-      |> is_initiailzied_board()
+      |> is_initialized_board()
     end
   end
 
@@ -99,11 +118,20 @@ defmodule Wordual.GameTest do
 
       result.boards
       |> Map.get("flerpn1")
-      |> is_initiailzied_board()
+      |> is_initialized_board()
 
       result.boards
       |> Map.get("flerpn2")
-      |> is_initiailzied_board()
+      |> is_initialized_board()
+    end
+
+    test "It initializes the statistics for the players" do
+      result =
+        Game.init("abc123", "swole")
+        |> Game.join("p1")
+        |> Game.join("p2")
+
+      assert result.statistics == %{"p1" => %{wins: 0, losses: 0}, "p2" => %{wins: 0, losses: 0}}
     end
 
     test "It only allows the player to join once" do
@@ -135,6 +163,18 @@ defmodule Wordual.GameTest do
       result = Game.join(result, "flerpn2")
 
       assert result.state == :in_progress
+    end
+  end
+
+  describe "save_statistics/2" do
+    test "It can persist previous game statistics" do
+      result =
+        Game.init("abc123", "swole")
+        |> Game.join("flerpn1")
+        |> Game.join("flerpn2")
+        |> Game.save_statistics(%{"flerpn1" => %{wins: 1, losses: 0}, "flerpn2" => %{wins: 0, losses: 1}})
+
+      assert result.statistics == %{"flerpn1" => %{wins: 1, losses: 0}, "flerpn2" => %{wins: 0, losses: 1}}
     end
   end
 end

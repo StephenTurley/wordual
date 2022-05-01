@@ -90,6 +90,7 @@ defmodule Wordual.GameServer do
       Game.init(game.id, Words.random_word())
       |> Game.join(player_id)
       |> Game.join(other_player)
+      |> Game.save_statistics(game.statistics)
 
     Phoenix.PubSub.broadcast!(@pubsub, game.id, {:game_updated, player_id, game.id})
     {:reply, {:ok, game}, game}

@@ -1,5 +1,5 @@
 defmodule Wordual.Game do
-  defstruct [:id, :ttl, :state, :word, :keyboard_hints, boards: %{}]
+  defstruct [:id, :ttl, :state, :word, :keyboard_hints, :statistics, boards: %{}]
 
   alias Wordual.Board
   alias Wordual.KeyboardHints
@@ -13,7 +13,8 @@ defmodule Wordual.Game do
       ttl: @ttl,
       word: word,
       state: :starting,
-      keyboard_hints: KeyboardHints.init()
+      keyboard_hints: KeyboardHints.init(),
+      statistics: %{}
     }
   end
 
@@ -33,6 +34,11 @@ defmodule Wordual.Game do
 
   def clear_char(_game, _player_id), do: {:error, :not_started}
 
+  def save_statistics(game, statistics) do
+    game
+    |> Map.put(:statistics, statistics)
+  end
+
   def join(game, player_id) do
     cond do
       Map.has_key?(game.boards, player_id) ->
@@ -44,10 +50,13 @@ defmodule Wordual.Game do
       map_size(game.boards) == 1 ->
         game
         |> Map.put(:boards, init_board(game.boards, player_id))
+        |> Map.put(:statistics, init_statistics(game.statistics, player_id))
         |> Map.put(:state, :in_progress)
 
       true ->
-        Map.put(game, :boards, init_board(game.boards, player_id))
+        game
+        |> Map.put(:statistics, init_statistics(game.statistics, player_id))
+        |> Map.put(:boards, init_board(game.boards, player_id))
     end
   end
 
@@ -82,6 +91,10 @@ defmodule Wordual.Game do
     Map.put(boards, player_id, Board.init())
   end
 
+  defp init_statistics(statistics, player_id) do
+    Map.put(statistics, player_id, %{wins: 0, losses: 0})
+  end
+
   defp update_board(game, player_id, updater) do
     game = Map.put(game, :ttl, @ttl)
 
@@ -95,6 +108,7 @@ defmodule Wordual.Game do
       {:ok, board} ->
         game =
           game
+          |> determine_winner(player_id, board)
           |> replace_board(player_id, board)
           |> Map.put(:state, :complete)
 
@@ -103,6 +117,29 @@ defmodule Wordual.Game do
       err ->
         err
     end
+  end
+
+  defp determine_winner(game, player_id, board) do
+    winner =
+      case board.state do
+        :correct -> player_id
+        _ -> other_player(game, player_id)
+      end
+
+    Map.replace!(
+      game,
+      :statistics,
+      game.statistics
+      |> Enum.reduce(%{}, fn {id, old}, statistics ->
+        player_stats = if winner == id do
+          Map.update!(old, :wins, fn w -> w + 1 end)
+        else
+          Map.update!(old, :losses, fn l -> l + 1 end)
+        end
+
+        Map.put(statistics, id, player_stats)
+      end)
+    )
   end
 
   defp replace_board(game, player_id, board) do

@@ -34,7 +34,7 @@ defmodule WordualWeb.GameLive do
   end
 
   @impl true
-  def handle_info({:game_updated, player_id, game_id}, socket) do
+  def handle_info({:game_updated, _player_id, game_id}, socket) do
     {:ok, game} = Wordual.get_game(game_id)
 
     {:noreply, assign(socket, :game, game)}
