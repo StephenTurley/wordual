@@ -24,7 +24,7 @@ defmodule WordualWeb.Live.BoardComponent do
     ~H"""
     <%= unless first_game do %>
       <pre>Wins: <%= @statistics.wins %> Losses: <%= @statistics.losses %></pre>
-    <%= end %>
+    <% end %>
     <div class="board grid grid-rows-4 gap-[5px] box-border p-1">
     <%= for row <- @board.rows do %>
       <div class="grid grid-cols-5 gap-[5px]">
