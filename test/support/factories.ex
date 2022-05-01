@@ -1,5 +1,6 @@
 defmodule Wordual.Test.Support.Factories do
   alias Wordual.Board
+  alias Wordual.Game
   alias Wordual.Row
 
   def row(word) do
@@ -9,6 +10,16 @@ defmodule Wordual.Test.Support.Factories do
       {:ok, row} = Row.add_char(row, char)
       row
     end)
+  end
+
+  def submit_player_row(game, player_id, word) do
+    word
+    |> String.split("", trim: true)
+    |> Enum.reduce(game, fn char, game ->
+      Game.add_char(game, player_id, char) |> elem(1)
+    end)
+    |> Game.submit_row(player_id)
+    |> elem(1)
   end
 
   def board_with_words(board \\ Board.init(), words) when is_list(words) do
