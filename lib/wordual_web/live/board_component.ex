@@ -11,7 +11,6 @@ defmodule WordualWeb.Live.BoardComponent do
       assigns.game
       |> Map.get(:statistics)
       |> Map.get(assigns.id)
-      |> IO.inspect()
 
     first_game =
       statistics
