@@ -172,9 +172,15 @@ defmodule Wordual.GameTest do
         Game.init("abc123", "swole")
         |> Game.join("flerpn1")
         |> Game.join("flerpn2")
-        |> Game.save_statistics(%{"flerpn1" => %{wins: 1, losses: 0}, "flerpn2" => %{wins: 0, losses: 1}})
+        |> Game.save_statistics(%{
+          "flerpn1" => %{wins: 1, losses: 0},
+          "flerpn2" => %{wins: 0, losses: 1}
+        })
 
-      assert result.statistics == %{"flerpn1" => %{wins: 1, losses: 0}, "flerpn2" => %{wins: 0, losses: 1}}
+      assert result.statistics == %{
+               "flerpn1" => %{wins: 1, losses: 0},
+               "flerpn2" => %{wins: 0, losses: 1}
+             }
     end
   end
 end

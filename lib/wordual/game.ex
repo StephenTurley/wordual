@@ -131,11 +131,12 @@ defmodule Wordual.Game do
       :statistics,
       game.statistics
       |> Enum.reduce(%{}, fn {id, old}, statistics ->
-        player_stats = if winner == id do
-          Map.update!(old, :wins, fn w -> w + 1 end)
-        else
-          Map.update!(old, :losses, fn l -> l + 1 end)
-        end
+        player_stats =
+          if winner == id do
+            Map.update!(old, :wins, fn w -> w + 1 end)
+          else
+            Map.update!(old, :losses, fn l -> l + 1 end)
+          end
 
         Map.put(statistics, id, player_stats)
       end)
