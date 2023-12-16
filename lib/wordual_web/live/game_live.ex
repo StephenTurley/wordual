@@ -21,7 +21,13 @@ defmodule WordualWeb.GameLive do
   def mount(_params, %{"player_id" => player_id}, socket) do
     if connected?(socket) do
       {:ok, game} = Wordual.start_game(player_id)
-      {:ok, assigns(socket, game, player_id)}
+
+      socket =
+        socket
+        |> assigns(game, player_id)
+        |> push_redirect(to: "/#{game.id}")
+
+      {:ok, socket}
     else
       {:ok, assign(socket, :game, nil)}
     end
