@@ -19,12 +19,6 @@ config :wordual, WordualWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
   version: Mix.Project.config()[:version]
 
-config :wordual, Wordual.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  url: "${DATABASE_URL}",
-  database: "",
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
-
 # Do not print debug messages in production
 config :logger, level: :info
 
