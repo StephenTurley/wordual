@@ -6,7 +6,6 @@ defmodule Wordual.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      Wordual.Repo,
       WordualWeb.Telemetry,
       {Phoenix.PubSub, name: Wordual.PubSub},
       WordualWeb.Endpoint,
