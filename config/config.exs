@@ -13,6 +13,7 @@ config :wordual,
 # Configures the endpoint
 config :wordual, WordualWeb.Endpoint,
   url: [host: "localhost"],
+  adapter: Phoenix.Endpoint.Cowboy2Adapter,
   render_errors: [view: WordualWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Wordual.PubSub,
   live_view: [signing_salt: "xAfEyIxr"]
