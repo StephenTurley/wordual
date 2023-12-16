@@ -14,6 +14,7 @@ kill_signal = "SIGTERM"
 
 [env]
   PHX_HOST = "worduel.net"
+  DNS_CLUSTER_QUERY = "wordual.internal"
   PORT = "8080"
 
 [http_service]

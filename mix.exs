@@ -34,6 +34,7 @@ defmodule Wordual.MixProject do
   defp deps do
     [
       {:distillery, "~> 2.1"},
+      {:dns_cluster, "~> 0.1.1"},
       {:phoenix, "~> 1.6.6"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},

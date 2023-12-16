@@ -10,6 +10,7 @@ defmodule Wordual.Application do
       {Phoenix.PubSub, name: Wordual.PubSub},
       WordualWeb.Endpoint,
       {Registry, keys: :unique, name: Wordual.GameRegistry},
+      {DNSCluster, query: Application.get_env(:wordual, :dns_cluster_query) || :ignore},
       {DynamicSupervisor, name: Wordual.GameSupervisor, strategy: :one_for_one}
     ]
 
