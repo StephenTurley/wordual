@@ -17,14 +17,14 @@ defmodule Wordual.GameServer do
   def start(game_id) do
     opts = [
       game_id: game_id,
-      name: {:via, Registry, {@registry, game_id}}
+      name: {:via, Horde.Registry, {@registry, game_id}}
     ]
 
-    DynamicSupervisor.start_child(@supervisor, {__MODULE__, opts})
+    Horde.DynamicSupervisor.start_child(@supervisor, {__MODULE__, opts})
   end
 
   def lookup(game_id) do
-    case Registry.lookup(@registry, game_id) do
+    case Horde.Registry.lookup(@registry, game_id) do
       [{pid, _}] -> {:ok, pid}
       [] -> {:error, :not_found}
     end

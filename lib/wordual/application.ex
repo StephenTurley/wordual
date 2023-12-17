@@ -9,9 +9,10 @@ defmodule Wordual.Application do
       WordualWeb.Telemetry,
       {Phoenix.PubSub, name: Wordual.PubSub},
       WordualWeb.Endpoint,
-      {Registry, keys: :unique, name: Wordual.GameRegistry},
+      {Horde.Registry, keys: :unique, name: Wordual.GameRegistry, members: :auto},
       {DNSCluster, query: Application.get_env(:wordual, :dns_cluster_query) || :ignore},
-      {DynamicSupervisor, name: Wordual.GameSupervisor, strategy: :one_for_one}
+      {Horde.DynamicSupervisor,
+       name: Wordual.GameSupervisor, strategy: :one_for_one, members: :auto}
     ]
 
     opts = [strategy: :one_for_one, name: Wordual.Supervisor]
