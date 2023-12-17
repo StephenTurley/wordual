@@ -9,8 +9,7 @@ defmodule WordualWeb.GameLive do
           {:ok, assigns(socket, game, player_id)}
 
         _ ->
-          {:ok, game} = Wordual.start_game(player_id)
-          {:ok, assigns(socket, game, player_id)}
+          {:ok, start_game(socket, player_id)}
       end
     else
       {:ok, assign(socket, :game, nil)}
@@ -20,17 +19,18 @@ defmodule WordualWeb.GameLive do
   @impl true
   def mount(_params, %{"player_id" => player_id}, socket) do
     if connected?(socket) do
-      {:ok, game} = Wordual.start_game(player_id)
-
-      socket =
-        socket
-        |> assigns(game, player_id)
-        |> push_redirect(to: "/#{game.id}")
-
-      {:ok, socket}
+      {:ok, start_game(socket, player_id)}
     else
       {:ok, assign(socket, :game, nil)}
     end
+  end
+
+  defp start_game(socket, player_id) do
+    {:ok, game} = Wordual.start_game(player_id)
+
+    socket
+    |> assigns(game, player_id)
+    |> push_redirect(to: "/#{game.id}")
   end
 
   defp assigns(socket, game, player_id) do
